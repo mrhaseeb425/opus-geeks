@@ -1,5 +1,8 @@
 import { useState } from "react";
 import Icon from "../components/Icon";
+import Magnetic from "../components/Magnetic";
+import Reveal from "../components/Reveal";
+import { staggerDelay } from "../lib/stagger";
 
 const FAQ_ITEMS = [
   {
@@ -45,13 +48,13 @@ export default function FAQs({ setActiveNav }) {
   return (
     <div className="page-hero">
       <section className="page-header">
-        <div className="frame">
+        <Reveal as="div" className="frame">
           <p className="section-eyebrow">FAQs</p>
           <h1>Frequently asked questions</h1>
           <p className="page-header-subtitle">
             Answers to what clients most often ask before starting a project.
           </p>
-        </div>
+        </Reveal>
       </section>
 
       <section className="section">
@@ -60,9 +63,11 @@ export default function FAQs({ setActiveNav }) {
             {FAQ_ITEMS.map((item, index) => {
               const isOpen = index === openIndex;
               return (
-                <div
+                <Reveal
+                  as="div"
                   className={`faq-item ${isOpen ? "is-open" : ""}`}
                   key={item.question}
+                  delay={staggerDelay(index, 0.06)}
                 >
                   <button
                     className="faq-question"
@@ -73,7 +78,7 @@ export default function FAQs({ setActiveNav }) {
                     <Icon name={isOpen ? "minus" : "plus"} />
                   </button>
                   {isOpen && <p className="faq-answer">{item.answer}</p>}
-                </div>
+                </Reveal>
               );
             })}
           </div>
@@ -81,15 +86,17 @@ export default function FAQs({ setActiveNav }) {
       </section>
 
       <section className="section cta-banner">
-        <div className="frame cta-banner-inner">
+        <Reveal as="div" className="frame cta-banner-inner">
           <div>
             <h2>Still have questions?</h2>
             <p>We're happy to walk through the details on a quick call.</p>
           </div>
-          <a className="btn-gradient" href="#contact" onClick={goTo("Contact Us")}>
-            Contact us <Icon name="arrowRight" className="icon-sm" />
-          </a>
-        </div>
+          <Magnetic>
+            <a className="btn-gradient" href="#contact" onClick={goTo("Contact Us")}>
+              Contact us <Icon name="arrowRight" className="icon-sm" />
+            </a>
+          </Magnetic>
+        </Reveal>
       </section>
     </div>
   );

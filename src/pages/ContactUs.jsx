@@ -1,5 +1,7 @@
 import { useState } from "react";
 import Icon from "../components/Icon";
+import Magnetic from "../components/Magnetic";
+import Reveal from "../components/Reveal";
 import { CONTACT, SOCIALS } from "../data/site";
 
 const INITIAL_FORM = { name: "", email: "", service: "", message: "" };
@@ -25,19 +27,19 @@ export default function ContactUs() {
   return (
     <div className="page-hero">
       <section className="page-header">
-        <div className="frame">
+        <Reveal as="div" className="frame">
           <p className="section-eyebrow">Contact Us</p>
           <h1>Let's build something together</h1>
           <p className="page-header-subtitle">
             Tell us about your project and we'll get back to you within one
             business day.
           </p>
-        </div>
+        </Reveal>
       </section>
 
       <section className="section">
         <div className="frame contact-grid">
-          <form className="card-glass contact-form" onSubmit={handleSubmit}>
+          <Reveal as="form" className="card-glass contact-form" onSubmit={handleSubmit}>
             <div className="form-row">
               <label htmlFor="name">Full name</label>
               <input
@@ -94,20 +96,22 @@ export default function ContactUs() {
               />
             </div>
 
-            <button className="btn-gradient" type="submit">
-              Send message <Icon name="arrowRight" className="icon-sm" />
-            </button>
+            <Magnetic>
+              <button className="btn-gradient" type="submit">
+                Send message <Icon name="arrowRight" className="icon-sm" />
+              </button>
+            </Magnetic>
 
             {status === "submitted" && (
               <p className="form-success" role="status">
                 <Icon name="check" className="icon-sm" />
-                Thanks — your message has been noted. We'll follow up by
-                email shortly.
+                Thanks — your message has been noted. We'll follow up by email
+                shortly.
               </p>
             )}
-          </form>
+          </Reveal>
 
-          <div className="contact-side">
+          <Reveal as="div" className="contact-side" delay={0.12}>
             <div className="card-glass contact-info-card">
               <h3>Contact details</h3>
               <ul className="footer-contact-list">
@@ -146,7 +150,7 @@ export default function ContactUs() {
                 ))}
               </div>
             </div>
-          </div>
+          </Reveal>
         </div>
       </section>
     </div>

@@ -1,4 +1,7 @@
 import Icon from "../components/Icon";
+import Magnetic from "../components/Magnetic";
+import Reveal from "../components/Reveal";
+import { staggerDelay } from "../lib/stagger";
 import { SERVICES, PROCESS_STEPS } from "../data/site";
 
 export default function Services({ serviceName, setActiveNav }) {
@@ -12,7 +15,7 @@ export default function Services({ serviceName, setActiveNav }) {
   return (
     <div className="page-hero">
       <section className="page-header">
-        <div className="frame">
+        <Reveal as="div" className="frame">
           <p className="section-eyebrow">Services</p>
           <h1>
             {activeService ? activeService.name : "What we build"}
@@ -22,19 +25,21 @@ export default function Services({ serviceName, setActiveNav }) {
               ? activeService.summary
               : "Full-cycle product teams for app development, web platforms, interface design, and games — pick a service to see how we work."}
           </p>
-        </div>
+        </Reveal>
       </section>
 
       <section className="section">
         <div className="frame">
           <div className="services-detail-grid">
-            {SERVICES.map((service) => (
-              <article
+            {SERVICES.map((service, index) => (
+              <Reveal
+                as="article"
                 key={service.name}
                 id={service.hash}
                 className={`card-glass service-detail-card ${
                   activeService?.name === service.name ? "is-active" : ""
                 }`}
+                delay={staggerDelay(index)}
               >
                 <span className="card-icon-badge">
                   <Icon name={service.icon} />
@@ -57,7 +62,7 @@ export default function Services({ serviceName, setActiveNav }) {
                   Discuss this service{" "}
                   <Icon name="arrowRight" className="icon-sm" />
                 </a>
-              </article>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -65,13 +70,18 @@ export default function Services({ serviceName, setActiveNav }) {
 
       <section className="section section-alt">
         <div className="frame">
-          <div className="section-head">
+          <Reveal as="div" className="section-head">
             <p className="section-eyebrow">How it comes together</p>
             <h2 className="section-title">Our delivery process</h2>
-          </div>
+          </Reveal>
           <div className="process-rail">
             {PROCESS_STEPS.map((step, index) => (
-              <div className="process-step" key={step.name}>
+              <Reveal
+                as="div"
+                className="process-step"
+                key={step.name}
+                delay={staggerDelay(index)}
+              >
                 <div className="process-step-top">
                   <span className="process-number">{step.step}</span>
                   <span className="card-icon-badge process-icon">
@@ -83,22 +93,24 @@ export default function Services({ serviceName, setActiveNav }) {
                 {index < PROCESS_STEPS.length - 1 && (
                   <span className="process-connector" aria-hidden="true" />
                 )}
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
       </section>
 
       <section className="section cta-banner">
-        <div className="frame cta-banner-inner">
+        <Reveal as="div" className="frame cta-banner-inner">
           <div>
             <h2>Not sure which service fits?</h2>
             <p>Tell us what you're trying to build and we'll point you in the right direction.</p>
           </div>
-          <a className="btn-gradient" href="#contact" onClick={goTo("Contact Us")}>
-            Talk to the team <Icon name="arrowRight" className="icon-sm" />
-          </a>
-        </div>
+          <Magnetic>
+            <a className="btn-gradient" href="#contact" onClick={goTo("Contact Us")}>
+              Talk to the team <Icon name="arrowRight" className="icon-sm" />
+            </a>
+          </Magnetic>
+        </Reveal>
       </section>
     </div>
   );

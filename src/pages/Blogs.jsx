@@ -1,4 +1,6 @@
 import Icon from "../components/Icon";
+import Reveal from "../components/Reveal";
+import { staggerDelay } from "../lib/stagger";
 
 // Placeholder articles for the blog grid — replace with real posts as they're
 // published. Keeping the structure here makes it a drop-in swap later.
@@ -53,19 +55,19 @@ export default function Blogs() {
   return (
     <div className="page-hero">
       <section className="page-header">
-        <div className="frame">
+        <Reveal as="div" className="frame">
           <p className="section-eyebrow">Blogs & Insights</p>
           <h1>Notes from the studio</h1>
           <p className="page-header-subtitle">
             Thinking on product strategy, design, and engineering from the
             team building it every day.
           </p>
-        </div>
+        </Reveal>
       </section>
 
       <section className="section">
         <div className="frame">
-          <article className="card-glass featured-post">
+          <Reveal as="article" className="card-glass featured-post">
             <span className="tag-pill">{featured.category}</span>
             <h2>{featured.title}</h2>
             <p>{featured.excerpt}</p>
@@ -73,11 +75,16 @@ export default function Blogs() {
               <Icon name="clock" className="icon-sm" />
               {featured.readTime}
             </span>
-          </article>
+          </Reveal>
 
           <div className="grid-3 blog-grid">
-            {rest.map((post) => (
-              <article className="card-glass blog-card" key={post.title}>
+            {rest.map((post, index) => (
+              <Reveal
+                as="article"
+                className="card-glass blog-card"
+                key={post.title}
+                delay={staggerDelay(index)}
+              >
                 <span className="tag-pill">{post.category}</span>
                 <h3>{post.title}</h3>
                 <p>{post.excerpt}</p>
@@ -85,7 +92,7 @@ export default function Blogs() {
                   <Icon name="clock" className="icon-sm" />
                   {post.readTime}
                 </span>
-              </article>
+              </Reveal>
             ))}
           </div>
         </div>

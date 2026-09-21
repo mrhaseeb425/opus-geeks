@@ -1,8 +1,15 @@
 import { useEffect, useState } from "react";
 import "../App.css";
 import { NAV_ITEMS, SERVICES } from "../data/site";
+import Icon from "./Icon";
+import Magnetic from "./Magnetic";
 
-export default function Navbar({ activeNav, setActiveNav }) {
+export default function Navbar({
+  activeNav,
+  setActiveNav,
+  isDarkMode,
+  onToggleDarkMode,
+}) {
   const [isServicesOpen, setIsServicesOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -26,9 +33,7 @@ export default function Navbar({ activeNav, setActiveNav }) {
 
   return (
     <>
-      <header
-        className={`site-header ${isScrolled ? "is-scrolled" : ""}`}
-      >
+      <header className={`site-header ${isScrolled ? "is-scrolled" : ""}`}>
         <div className="navbar-frame">
           <a
             className="brand"
@@ -36,35 +41,8 @@ export default function Navbar({ activeNav, setActiveNav }) {
             aria-label="OpusGeeks"
             onClick={() => goTo("Home")}
           >
-            <span className="brand-mark">
-              <svg
-                viewBox="0 0 100 100"
-                className="brand-svg"
-                aria-hidden="true"
-              >
-                <path
-                  d="M50 10 C 25 10, 10 30, 10 50 C 10 70, 25 90, 50 90 C 70 90, 85 75, 85 50 L 50 50 L 50 62 L 72 62 C 68 74, 58 80, 48 80 C 30 80, 22 65, 22 50 C 22 35, 30 20, 48 20 C 60 20, 70 27, 74 36 L 86 28 C 78 17, 65 10, 50 10 Z"
-                  fill="url(#og-gradient)"
-                />
-                <defs>
-                  <linearGradient
-                    id="og-gradient"
-                    x1="0%"
-                    y1="0%"
-                    x2="100%"
-                    y2="100%"
-                  >
-                    <stop offset="0%" stopColor="#8b5cf6" />
-                    <stop offset="55%" stopColor="#3b82f6" />
-                    <stop offset="100%" stopColor="#2dd4bf" />
-                  </linearGradient>
-                </defs>
-              </svg>
-            </span>
-
-            <span className="brand-copy">
-              <span className="brand-primary">OPUS</span>
-              <span className="brand-secondary">GEEKS</span>
+            <span className="brand-logo-wrap">
+              <img className="brand-logo" src="/logo.png" alt="OpusGeeks" />
             </span>
           </a>
 
@@ -157,15 +135,33 @@ export default function Navbar({ activeNav, setActiveNav }) {
           </nav>
 
           <div className="nav-actions">
-            <a
-              className="cta-button"
-              href="#contact"
-              onClick={() => goTo("Contact Us")}
+            <button
+              className={`header-theme-toggle ${isDarkMode ? "is-light" : ""}`}
+              type="button"
+              onClick={onToggleDarkMode}
+              aria-label={
+                isDarkMode ? "Switch to light mode" : "Switch to dark mode"
+              }
+              aria-pressed={isDarkMode}
             >
-              <span className="cta-button-glass">
-                <span>Get Started</span>
+              <span className="theme-toggle-track" aria-hidden="true">
+                <span className="theme-toggle-thumb">
+                  <Icon name={isDarkMode ? "sun" : "moon"} />
+                </span>
               </span>
-            </a>
+            </button>
+
+            <Magnetic strength={0.25}>
+              <a
+                className="cta-button"
+                href="#contact"
+                onClick={() => goTo("Contact Us")}
+              >
+                <span className="cta-button-glass">
+                  <span>Get Started</span>
+                </span>
+              </a>
+            </Magnetic>
 
             <button
               className="mobile-menu-button"
@@ -175,7 +171,9 @@ export default function Navbar({ activeNav, setActiveNav }) {
               }
               aria-expanded={mobileMenuOpen}
             >
-              <span className={`burger-icon ${mobileMenuOpen ? "is-open" : ""}`}>
+              <span
+                className={`burger-icon ${mobileMenuOpen ? "is-open" : ""}`}
+              >
                 <span></span>
                 <span></span>
                 <span></span>
@@ -256,6 +254,19 @@ export default function Navbar({ activeNav, setActiveNav }) {
               >
                 <span>Start a project</span>
               </a>
+
+              <button
+                className={`mobile-theme-toggle ${isDarkMode ? "is-light" : ""}`}
+                type="button"
+                onClick={onToggleDarkMode}
+                aria-pressed={isDarkMode}
+              >
+                <span className="theme-toggle-track" aria-hidden="true">
+                  <span className="theme-toggle-thumb">
+                    <Icon name={isDarkMode ? "sun" : "moon"} />
+                  </span>
+                </span>
+              </button>
             </div>
           </div>
         )}

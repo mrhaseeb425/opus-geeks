@@ -9,7 +9,6 @@ export const NAV_ITEMS = [
   { label: "Contact Us", hash: "contact" },
   { label: "FAQs", hash: "faqs" },
 ];
-
 export const SERVICES = [
   {
     name: "App Development",

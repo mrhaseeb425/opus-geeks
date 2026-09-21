@@ -1,15 +1,22 @@
 import { useCallback, useEffect, useState } from "react";
+import { AnimatePresence, motion, MotionConfig } from "framer-motion";
 import "./App.css";
-import Navbar from "./components/Navbar";
+import CardSpotlight from "./components/CardSpotlight";
+import Cursor from "./components/Cursor";
 import Footer from "./components/Footer";
-import Home from "./pages/Home";
-import Services from "./pages/Services";
-import Portfolio from "./pages/Portfolio";
-import Blogs from "./pages/Blogs";
+import MouseTrail from "./components/MouseTrail";
+import Navbar from "./components/Navbar";
+import PageCurtain from "./components/PageCurtain";
+import Preloader from "./components/Preloader";
+import { NAV_ITEMS, SERVICES } from "./data/site";
+import { initLenis, scrollToTop } from "./lib/smoothScroll";
 import About from "./pages/About";
+import Blogs from "./pages/Blogs";
 import ContactUs from "./pages/ContactUs";
 import FAQs from "./pages/FAQs";
-import { NAV_ITEMS, SERVICES } from "./data/site";
+import Home from "./pages/Home";
+import Portfolio from "./pages/Portfolio";
+import Services from "./pages/Services";
 
 // Map every URL hash slug (e.g. "app-development") to the nav label the app
 // renders for it, so a direct link like /#contact or /#web-development opens
@@ -32,6 +39,8 @@ function labelFromHash() {
 
 export default function App() {
   const [activeNav, setActiveNavState] = useState(labelFromHash);
+  const [displayedNav, setDisplayedNav] = useState(activeNav);
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   // Keep in sync with browser back/forward and any direct link navigation.
   useEffect(() => {
@@ -52,11 +61,20 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    initLenis();
+  }, []);
+
+  // The curtain (below) covers the screen, then flips displayedNav so the
+  // page swap happens while fully hidden, then reveals the new page — this
+  // is what keeps the wipe transition from ever showing a mid-navigation
+  // flash of the outgoing or incoming content.
+  const handleCovered = useCallback(() => {
+    setDisplayedNav(activeNav);
+    scrollToTop();
   }, [activeNav]);
 
-  const renderPage = () => {
-    switch (activeNav) {
+  const renderPage = (nav) => {
+    switch (nav) {
       case "Home":
         return <Home setActiveNav={setActiveNav} />;
       case "Services":
@@ -64,7 +82,7 @@ export default function App() {
       case "Web Development":
       case "UX/UI Design":
       case "Game Development":
-        return <Services serviceName={activeNav} setActiveNav={setActiveNav} />;
+        return <Services serviceName={nav} setActiveNav={setActiveNav} />;
       case "Portfolio":
         return <Portfolio setActiveNav={setActiveNav} />;
       case "Blogs":
@@ -80,11 +98,45 @@ export default function App() {
     }
   };
 
+  const pageContent =
+    displayedNav === "Contact Us" ? (
+      <ContactUs
+        isDarkMode={isDarkMode}
+        onToggleDarkMode={() => setIsDarkMode((enabled) => !enabled)}
+      />
+    ) : (
+      renderPage(displayedNav)
+    );
+
   return (
-    <div className="app-shell">
-      <Navbar activeNav={activeNav} setActiveNav={setActiveNav} />
-      <main className="main-stage">{renderPage()}</main>
-      <Footer setActiveNav={setActiveNav} />
-    </div>
+    <MotionConfig reducedMotion="user">
+      <div className={`app-shell ${isDarkMode ? "is-dark" : ""}`}>
+        <Preloader />
+        <PageCurtain trigger={activeNav} onCovered={handleCovered} />
+        <MouseTrail />
+        <CardSpotlight />
+        <Cursor />
+        <Navbar
+          activeNav={activeNav}
+          setActiveNav={setActiveNav}
+          isDarkMode={isDarkMode}
+          onToggleDarkMode={() => setIsDarkMode((enabled) => !enabled)}
+        />
+        <main className="main-stage">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={displayedNav}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25 }}
+            >
+              {pageContent}
+            </motion.div>
+          </AnimatePresence>
+        </main>
+        <Footer setActiveNav={setActiveNav} />
+      </div>
+    </MotionConfig>
   );
 }

@@ -2,6 +2,9 @@ import { useEffect, useRef } from "react";
 import HeroSlider from "../components/HeroSlider";
 import Icon from "../components/Icon";
 import CountUp from "../components/CountUp";
+import Magnetic from "../components/Magnetic";
+import Reveal from "../components/Reveal";
+import { staggerDelay } from "../lib/stagger";
 import {
   SERVICES,
   INDUSTRIES,
@@ -51,14 +54,19 @@ export default function Home({ setActiveNav }) {
       {/* Stats strip */}
       <section className="stats-strip">
         <div className="frame stats-grid">
-          {STATS.map((stat) => (
-            <div className="stat-card" key={stat.label}>
+          {STATS.map((stat, index) => (
+            <Reveal
+              as="div"
+              className="stat-card"
+              key={stat.label}
+              delay={staggerDelay(index)}
+            >
               <Icon name={stat.icon} className="stat-icon" />
               <span className="stat-value">
                 <CountUp value={stat.value} />
               </span>
               <span className="stat-label">{stat.label}</span>
-            </div>
+            </Reveal>
           ))}
         </div>
       </section>
@@ -66,22 +74,24 @@ export default function Home({ setActiveNav }) {
       {/* Services overview */}
       <section className="section" id="services-preview">
         <div className="frame">
-          <div className="section-head">
+          <Reveal as="div" className="section-head">
             <p className="section-eyebrow">What we do</p>
             <h2 className="section-title">Services built around your goals</h2>
             <p className="section-subtitle">
               From first sketch to shipped product, our team handles design
               and engineering under one roof.
             </p>
-          </div>
+          </Reveal>
 
           <div className="grid-4 services-grid">
-            {SERVICES.map((service) => (
-              <a
+            {SERVICES.map((service, index) => (
+              <Reveal
+                as="a"
                 href={`#${service.hash}`}
                 className="card-glass service-card"
                 key={service.name}
                 onClick={goTo(service.name)}
+                delay={staggerDelay(index)}
               >
                 <span className="card-icon-badge">
                   <Icon name={service.icon} />
@@ -91,7 +101,7 @@ export default function Home({ setActiveNav }) {
                 <span className="card-link">
                   Learn more <Icon name="arrowRight" className="icon-sm" />
                 </span>
-              </a>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -100,24 +110,29 @@ export default function Home({ setActiveNav }) {
       {/* Industries */}
       <section className="section section-alt">
         <div className="frame">
-          <div className="section-head">
+          <Reveal as="div" className="section-head">
             <p className="section-eyebrow">Who we serve</p>
             <h2 className="section-title">Industries we build for</h2>
             <p className="section-subtitle">
               Deep experience across regulated, high-stakes industries where
               reliability isn't optional.
             </p>
-          </div>
+          </Reveal>
 
           <div className="grid-4 industries-grid">
-            {INDUSTRIES.map((industry) => (
-              <div className="industry-card" key={industry.name}>
+            {INDUSTRIES.map((industry, index) => (
+              <Reveal
+                as="div"
+                className="industry-card"
+                key={industry.name}
+                delay={staggerDelay(index)}
+              >
                 <span className="card-icon-badge">
                   <Icon name={industry.icon} />
                 </span>
                 <h3>{industry.name}</h3>
                 <p>{industry.detail}</p>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -126,14 +141,14 @@ export default function Home({ setActiveNav }) {
       {/* Tech stack */}
       <section className="section tech-marquee-section">
         <div className="frame">
-          <div className="section-head">
+          <Reveal as="div" className="section-head">
             <p className="section-eyebrow">Our toolkit</p>
             <h2 className="section-title">Technologies behind the work</h2>
             <p className="section-subtitle">
               The languages, frameworks, and platforms our team reaches for
               on every build.
             </p>
-          </div>
+          </Reveal>
         </div>
 
         <div className="tech-marquee">
@@ -150,18 +165,23 @@ export default function Home({ setActiveNav }) {
       {/* Process */}
       <section className="section">
         <div className="frame">
-          <div className="section-head">
+          <Reveal as="div" className="section-head">
             <p className="section-eyebrow">How we work</p>
             <h2 className="section-title">A process built for momentum</h2>
             <p className="section-subtitle">
               Four stages keep every project moving from idea to launch,
               without surprises along the way.
             </p>
-          </div>
+          </Reveal>
 
           <div className="process-rail">
             {PROCESS_STEPS.map((step, index) => (
-              <div className="process-step" key={step.name}>
+              <Reveal
+                as="div"
+                className="process-step"
+                key={step.name}
+                delay={staggerDelay(index)}
+              >
                 <div className="process-step-top">
                   <span className="process-number">{step.step}</span>
                   <span className="card-icon-badge process-icon">
@@ -173,7 +193,7 @@ export default function Home({ setActiveNav }) {
                 {index < PROCESS_STEPS.length - 1 && (
                   <span className="process-connector" aria-hidden="true" />
                 )}
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -182,14 +202,19 @@ export default function Home({ setActiveNav }) {
       {/* Testimonials */}
       <section className="section section-alt">
         <div className="frame">
-          <div className="section-head">
+          <Reveal as="div" className="section-head">
             <p className="section-eyebrow">Client feedback</p>
             <h2 className="section-title">Trusted by teams who move fast</h2>
-          </div>
+          </Reveal>
 
           <div className="grid-3 testimonial-grid">
-            {TESTIMONIALS.map((testimonial) => (
-              <figure className="card-glass testimonial-card" key={testimonial.author}>
+            {TESTIMONIALS.map((testimonial, index) => (
+              <Reveal
+                as="figure"
+                className="card-glass testimonial-card"
+                key={testimonial.author}
+                delay={staggerDelay(index)}
+              >
                 <Icon name="quote" className="testimonial-quote-icon" />
                 <div className="testimonial-stars">
                   {Array.from({ length: 5 }).map((_, i) => (
@@ -201,7 +226,7 @@ export default function Home({ setActiveNav }) {
                   <strong>{testimonial.author}</strong>
                   <span>{testimonial.role}</span>
                 </figcaption>
-              </figure>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -209,7 +234,7 @@ export default function Home({ setActiveNav }) {
 
       {/* CTA banner */}
       <section className="section cta-banner">
-        <div className="frame cta-banner-inner">
+        <Reveal as="div" className="frame cta-banner-inner">
           <div>
             <h2>Ready to build something exceptional?</h2>
             <p>
@@ -217,10 +242,12 @@ export default function Home({ setActiveNav }) {
               business day.
             </p>
           </div>
-          <a className="btn-gradient" href="#contact" onClick={goTo("Contact Us")}>
-            Start a project <Icon name="arrowRight" className="icon-sm" />
-          </a>
-        </div>
+          <Magnetic>
+            <a className="btn-gradient" href="#contact" onClick={goTo("Contact Us")}>
+              Start a project <Icon name="arrowRight" className="icon-sm" />
+            </a>
+          </Magnetic>
+        </Reveal>
       </section>
     </div>
   );
