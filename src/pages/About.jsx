@@ -1,9 +1,9 @@
-import Icon from "../components/Icon";
 import CountUp from "../components/CountUp";
+import Icon from "../components/Icon";
 import Magnetic from "../components/Magnetic";
 import Reveal from "../components/Reveal";
-import { staggerDelay } from "../lib/stagger";
 import { STATS, TAGLINE } from "../data/site";
+import { staggerDelay } from "../lib/stagger";
 
 const VALUES = [
   {
@@ -48,8 +48,8 @@ export default function About({ setActiveNav }) {
   };
 
   return (
-    <div className="page-hero">
-      <section className="page-header">
+    <div className="page-hero about-page">
+      <section className="page-header about-page-header">
         <Reveal as="div" className="frame">
           <p className="section-eyebrow">About Opus Geeks</p>
           <h1>A dedicated team of designers, developers, and builders</h1>
@@ -57,7 +57,7 @@ export default function About({ setActiveNav }) {
         </Reveal>
       </section>
 
-      <section className="section">
+      <section className="section about-section about-story-section">
         <div className="frame about-story-grid">
           <Reveal as="div" variant="fade">
             <p className="section-eyebrow">Our story</p>
@@ -66,16 +66,16 @@ export default function About({ setActiveNav }) {
             </h2>
             <p className="about-copy">
               Opus Geeks started with a simple idea: startups and enterprises
-              alike deserve a technology partner that treats their product
-              like its own. With teams in Karachi, Pakistan and headquarters
-              in Pembroke Pines, Florida, we've grown into a full-cycle studio
+              alike deserve a technology partner that treats their product like
+              its own. With teams in Karachi, Pakistan and headquarters in
+              Pembroke Pines, Florida, we've grown into a full-cycle studio
               covering strategy, design, and engineering.
             </p>
             <p className="about-copy">
               We work across fintech, healthcare, retail, and real estate —
-              industries where reliability, compliance, and user trust
-              genuinely matter — helping our clients stay ahead of the curve
-              instead of playing catch-up.
+              industries where reliability, compliance, and user trust genuinely
+              matter — helping our clients stay ahead of the curve instead of
+              playing catch-up.
             </p>
           </Reveal>
 
@@ -98,7 +98,7 @@ export default function About({ setActiveNav }) {
         </div>
       </section>
 
-      <section className="section section-alt">
+      <section className="section section-alt about-section about-values-section">
         <div className="frame">
           <Reveal as="div" className="section-head">
             <p className="section-eyebrow">What we value</p>
@@ -123,7 +123,7 @@ export default function About({ setActiveNav }) {
         </div>
       </section>
 
-      <section className="section">
+      <section className="section about-section about-team-section">
         <div className="frame">
           <Reveal as="div" className="section-head">
             <p className="section-eyebrow">Our team</p>
@@ -151,14 +151,18 @@ export default function About({ setActiveNav }) {
         </div>
       </section>
 
-      <section className="section cta-banner">
+      <section className="section cta-banner about-cta-section">
         <Reveal as="div" className="frame cta-banner-inner">
           <div>
             <h2>Want to work with us?</h2>
             <p>We'd love to hear about what you're building.</p>
           </div>
           <Magnetic>
-            <a className="btn-gradient" href="#contact" onClick={goTo("Contact Us")}>
+            <a
+              className="btn-gradient"
+              href="#contact"
+              onClick={goTo("Contact Us")}
+            >
               Get in touch <Icon name="arrowRight" className="icon-sm" />
             </a>
           </Magnetic>

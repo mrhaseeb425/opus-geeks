@@ -16,6 +16,16 @@ const paths = {
       <path d="M7 6.5h.01M10.5 6.5h.01" />
     </>
   ),
+  database: (
+    <>
+      <ellipse cx="12" cy="5.5" rx="7.5" ry="3" />
+      <path d="M4.5 5.5v6c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3v-6" />
+      <path d="M4.5 11.5v6c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3v-6" />
+    </>
+  ),
+  cloud: (
+    <path d="M7.5 18.5h9a4 4 0 0 0 .5-7.97A5.5 5.5 0 0 0 6.4 9.4 4.6 4.6 0 0 0 7.5 18.5Z" />
+  ),
   pen: (
     <>
       <path d="M12 20h9" />
@@ -106,6 +116,32 @@ const paths = {
   ),
   arrowRight: <path d="M4 12h16M14 5l7 7-7 7" />,
   arrowLeft: <path d="M20 12H4M10 5l-7 7 7 7" />,
+  chevronDown: <path d="m6 9 6 6 6-6" />,
+  external: (
+    <>
+      <path d="M14 5h5v5" />
+      <path d="m19 5-8 8" />
+      <path d="M18 13v5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" />
+    </>
+  ),
+  expand: (
+    <>
+      <path d="M8 4H4v4M16 4h4v4M20 16v4h-4M4 16v4h4" />
+      <path d="m4 4 5 5M20 4l-5 5M20 20l-5-5M4 20l5-5" />
+    </>
+  ),
+  search: (
+    <>
+      <circle cx="10.8" cy="10.8" r="6.8" />
+      <path d="m16 16 5 5" />
+    </>
+  ),
+  link: (
+    <>
+      <path d="M10 13a5 5 0 0 0 7.1.1l2-2a5 5 0 0 0-7.1-7.1l-1.1 1.1" />
+      <path d="M14 11a5 5 0 0 0-7.1-.1l-2 2A5 5 0 0 0 12 20l1.1-1.1" />
+    </>
+  ),
   plus: <path d="M12 5v14M5 12h14" />,
   minus: <path d="M5 12h14" />,
   linkedin: (

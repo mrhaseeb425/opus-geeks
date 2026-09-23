@@ -46,18 +46,18 @@ export default function FAQs({ setActiveNav }) {
   };
 
   return (
-    <div className="page-hero">
-      <section className="page-header">
+    <div className="page-hero faq-page">
+      <section className="page-header faq-page-header">
         <Reveal as="div" className="frame">
-          <p className="section-eyebrow">FAQs</p>
-          <h1>Frequently asked questions</h1>
+          <p className="faq-eyebrow">FAQs</p>
+          <h1 className="faq-title">Frequently asked questions</h1>
           <p className="page-header-subtitle">
             Answers to what clients most often ask before starting a project.
           </p>
         </Reveal>
       </section>
 
-      <section className="section">
+      <section className="section faq-section">
         <div className="frame faq-frame">
           <div className="faq-list">
             {FAQ_ITEMS.map((item, index) => {
@@ -70,14 +70,21 @@ export default function FAQs({ setActiveNav }) {
                   delay={staggerDelay(index, 0.06)}
                 >
                   <button
-                    className="faq-question"
+                    className="faq-question outline-none focus:outline-none focus:ring-0 focus-visible:outline-none"
                     onClick={() => setOpenIndex(isOpen ? -1 : index)}
                     aria-expanded={isOpen}
                   >
                     <span>{item.question}</span>
-                    <Icon name={isOpen ? "minus" : "plus"} />
+                    <Icon
+                      name="chevronDown"
+                      className={`transition-transform duration-200 ${isOpen ? "rotate-180 text-blue-600" : "text-slate-400"}`}
+                    />
                   </button>
-                  {isOpen && <p className="faq-answer">{item.answer}</p>}
+                  {isOpen && (
+                    <p className="faq-answer outline-none ring-0 border-none select-none focus:outline-none">
+                      {item.answer}
+                    </p>
+                  )}
                 </Reveal>
               );
             })}
@@ -85,14 +92,18 @@ export default function FAQs({ setActiveNav }) {
         </div>
       </section>
 
-      <section className="section cta-banner">
+      <section className="section cta-banner faq-cta-section">
         <Reveal as="div" className="frame cta-banner-inner">
           <div>
             <h2>Still have questions?</h2>
             <p>We're happy to walk through the details on a quick call.</p>
           </div>
           <Magnetic>
-            <a className="btn-gradient" href="#contact" onClick={goTo("Contact Us")}>
+            <a
+              className="faq-cta-button"
+              href="#contact"
+              onClick={goTo("Contact Us")}
+            >
               Contact us <Icon name="arrowRight" className="icon-sm" />
             </a>
           </Magnetic>

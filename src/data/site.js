@@ -141,19 +141,31 @@ export const TESTIMONIALS = [
     quote:
       "Responsive from day one and genuinely invested in getting the product right. Our web platform launched on time and has been rock solid since.",
     author: "Founder",
-    role: "Fintech Startup",
+    role: "Founder & CEO",
+    company: "Northstar Finance",
+    companyMark: "NF",
+    avatar:
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=160&q=85",
   },
   {
     quote:
       "The team took the time to understand our workflows before writing a single line of code. Professional, communicative, and easy to work with.",
     author: "Operations Lead",
-    role: "Retail Company",
+    role: "VP Operations",
+    company: "Arc & Oak",
+    companyMark: "AO",
+    avatar:
+      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=160&q=85",
   },
   {
     quote:
       "Great design instincts paired with solid engineering. They caught issues we hadn't even thought of and shipped a much stronger product for it.",
     author: "Product Manager",
-    role: "Healthcare Platform",
+    role: "Product Manager",
+    company: "Careline Health",
+    companyMark: "CH",
+    avatar:
+      "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=160&q=85",
   },
 ];
 

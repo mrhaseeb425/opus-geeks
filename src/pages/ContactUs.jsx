@@ -1,10 +1,74 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Icon from "../components/Icon";
 import Magnetic from "../components/Magnetic";
 import Reveal from "../components/Reveal";
 import { CONTACT, SOCIALS } from "../data/site";
 
 const INITIAL_FORM = { name: "", email: "", service: "", message: "" };
+const SERVICE_OPTIONS = [
+  "App Development",
+  "Web Development",
+  "UX/UI Design",
+  "Game Development",
+  "Something else",
+];
+
+function ServiceSelect({ value, onChange }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const selectRef = useRef(null);
+  const selectedLabel = value || "Select a service";
+
+  useEffect(() => {
+    const handlePointerDown = (event) => {
+      if (!selectRef.current?.contains(event.target)) setIsOpen(false);
+    };
+    document.addEventListener("pointerdown", handlePointerDown);
+    return () => document.removeEventListener("pointerdown", handlePointerDown);
+  }, []);
+
+  const chooseOption = (option) => {
+    onChange({ target: { name: "service", value: option } });
+    setIsOpen(false);
+  };
+
+  return (
+    <div className={`custom-select ${isOpen ? "is-open" : ""}`} ref={selectRef}>
+      <button
+        type="button"
+        id="service"
+        className="custom-select-trigger"
+        aria-haspopup="listbox"
+        aria-expanded={isOpen}
+        aria-controls="service-options"
+        onClick={() => setIsOpen((open) => !open)}
+      >
+        <span className={!value ? "is-placeholder" : ""}>{selectedLabel}</span>
+        <span className="custom-select-caret" aria-hidden="true" />
+      </button>
+      {isOpen && (
+        <div
+          className="custom-select-options"
+          id="service-options"
+          role="listbox"
+          aria-label="Services"
+        >
+          {SERVICE_OPTIONS.map((option) => (
+            <button
+              type="button"
+              role="option"
+              aria-selected={value === option}
+              className={value === option ? "is-selected" : ""}
+              key={option}
+              onClick={() => chooseOption(option)}
+            >
+              {option}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function ContactUs() {
   const [form, setForm] = useState(INITIAL_FORM);
@@ -39,7 +103,11 @@ export default function ContactUs() {
 
       <section className="section">
         <div className="frame contact-grid">
-          <Reveal as="form" className="card-glass contact-form" onSubmit={handleSubmit}>
+          <Reveal
+            as="form"
+            className="card-glass contact-form"
+            onSubmit={handleSubmit}
+          >
             <div className="form-row">
               <label htmlFor="name">Full name</label>
               <input
@@ -68,19 +136,7 @@ export default function ContactUs() {
 
             <div className="form-row">
               <label htmlFor="service">Service you're interested in</label>
-              <select
-                id="service"
-                name="service"
-                value={form.service}
-                onChange={handleChange}
-              >
-                <option value="">Select a service</option>
-                <option value="App Development">App Development</option>
-                <option value="Web Development">Web Development</option>
-                <option value="UX/UI Design">UX/UI Design</option>
-                <option value="Game Development">Game Development</option>
-                <option value="Other">Something else</option>
-              </select>
+              <ServiceSelect value={form.service} onChange={handleChange} />
             </div>
 
             <div className="form-row">
@@ -114,22 +170,37 @@ export default function ContactUs() {
           <Reveal as="div" className="contact-side" delay={0.12}>
             <div className="card-glass contact-info-card">
               <h3>Contact details</h3>
-              <ul className="footer-contact-list">
-                <li>
-                  <Icon name="mail" />
-                  <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
+              <ul className="footer-contact-list contact-info-list">
+                <li className="contact-info-item">
+                  <span className="contact-info-icon">
+                    <Icon name="mail" />
+                  </span>
+                  <span className="contact-info-copy">
+                    <strong className="contact-info-label">Email</strong>
+                    <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
+                  </span>
                 </li>
-                <li>
-                  <Icon name="phone" />
-                  <a href={`tel:${CONTACT.phoneHref}`}>{CONTACT.phone}</a>
+                <li className="contact-info-item">
+                  <span className="contact-info-icon">
+                    <Icon name="phone" />
+                  </span>
+                  <span className="contact-info-copy">
+                    <strong className="contact-info-label">Phone</strong>
+                    <a href={`tel:${CONTACT.phoneHref}`}>{CONTACT.phone}</a>
+                  </span>
                 </li>
                 {CONTACT.offices.map((office) => (
-                  <li key={office.label}>
-                    <Icon name="pin" />
-                    <span>
-                      <strong>{office.label}</strong>
-                      <br />
-                      {office.address}
+                  <li className="contact-info-item" key={office.label}>
+                    <span className="contact-info-icon">
+                      <Icon name="pin" />
+                    </span>
+                    <span className="contact-info-copy">
+                      <strong className="contact-info-label">
+                        {office.label}
+                      </strong>
+                      <span className="contact-info-detail">
+                        {office.address}
+                      </span>
                     </span>
                   </li>
                 ))}
