@@ -10,7 +10,7 @@ import { PHOTOS } from "./photos.js";
 export const BLOG_CATEGORIES = [
   "All",
   "App Development",
-  "UX/UI Design",
+  "UI/UX Design",
   "Product Strategy",
   "Web Development",
 ];
@@ -57,7 +57,7 @@ export const POSTS = [
   {
     slug: "designing-fintech-interfaces-people-actually-trust",
     title: "Designing Fintech Interfaces People Actually Trust",
-    category: "UX/UI Design",
+    category: "UI/UX Design",
     date: "May 06, 2026",
     readTime: "5 min read",
     author: "Mariam Siddiqui",
@@ -149,7 +149,7 @@ export const POSTS = [
   {
     slug: "why-design-systems-pay-for-themselves",
     title: "Why Design Systems Pay for Themselves",
-    category: "UX/UI Design",
+    category: "UI/UX Design",
     date: "Apr 09, 2026",
     readTime: "5 min read",
     author: "Mariam Siddiqui",

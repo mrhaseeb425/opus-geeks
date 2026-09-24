@@ -1,4 +1,3 @@
-import Reveal from "./Reveal";
 
 // Section header in three layouts:
 // - "editorial" (the default, and what "split" now maps to): eyebrow with a
@@ -28,26 +27,25 @@ export default function SectionHead({
 
   if (layout === "editorial" || layout === "split") {
     return (
-      <Reveal as="div" className="section-head is-editorial">
+      <div className="section-head is-editorial">
         <div className="section-head-main">{heading}</div>
         <div className="ed-head-aside">
           {intro}
           {action && <div className="section-head-action">{action}</div>}
           {children}
         </div>
-      </Reveal>
+      </div>
     );
   }
 
   return (
-    <Reveal
-      as="div"
+    <div
       className={`section-head ${layout === "stacked" ? "is-stacked" : "is-center"}`}
     >
       {heading}
       {intro}
       {children}
       {action && <div className="section-head-action">{action}</div>}
-    </Reveal>
+    </div>
   );
 }

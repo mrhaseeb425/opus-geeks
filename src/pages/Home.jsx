@@ -1,38 +1,38 @@
 import FaqAccordion from "../components/FaqAccordion";
 import Hero from "../components/Hero";
 import Icon from "../components/Icon";
-import Photo from "../components/Photo";
 import NumberedRows from "../components/NumberedRows";
-import Reveal from "../components/Reveal";
+import Photo from "../components/Photo";
 import SectionHead from "../components/SectionHead";
 import StatsRow from "../components/StatsRow";
+import WorkGrid from "../components/WorkGrid";
 import {
   ClientPhoto,
   CompanyLogo,
   StarRating,
 } from "../components/Testimonial";
 import { LogoMarquee, RatingSummary, ReviewBadges } from "../components/Trust";
-import { staggerDelay } from "../lib/stagger";
 import { usePauseOffscreen } from "../lib/usePauseOffscreen";
 import { FAQ_PREVIEW } from "../data/faqs";
+import { PROJECTS } from "../data/projects";
 import {
   SERVICES,
   INDUSTRIES,
-  CONTENT,
   PROCESS_STEPS,
   TESTIMONIALS,
-  TEAM_PHOTOS,
   TECH_STACK,
   WHY_US,
   testimonialByline,
 } from "../data/site";
 import { COMPANY, STATS, TEAM_SIZE_LABEL } from "../data/stats";
+import { navigate } from "../lib/router";
 import { SIZES } from "../lib/images";
+
+// Four projects on Home; the rest live on /portfolio.
+const FEATURED_WORK = PROJECTS.slice(0, 4);
 
 export default function Home({ setActiveNav }) {
   const marqueeRef = usePauseOffscreen();
-  const teamPhotos = TEAM_PHOTOS.filter((photo) => photo.src);
-  const showTeamPhotos = CONTENT.showTeamPhotos && teamPhotos.length > 0;
 
   const goTo = (label) => (event) => {
     event.preventDefault();
@@ -41,11 +41,6 @@ export default function Home({ setActiveNav }) {
 
   return (
     <div className="home-page">
-      <div className="home-ambient" aria-hidden="true">
-        <span className="ambient-orb orb-1" />
-        <span className="ambient-orb orb-2" />
-        <span className="ambient-orb orb-3" />
-      </div>
       <Hero onNavigate={setActiveNav} />
 
       <LogoMarquee />
@@ -57,13 +52,13 @@ export default function Home({ setActiveNav }) {
         </div>
       </section>
 
-      {/* Services overview */}
+      {/* Services */}
       <section className="section" id="services-preview">
         <div className="frame">
           <SectionHead
             eyebrow="What we do"
-            title="Apps, platforms and games, built end to end"
-            subtitle="Pick one service or combine them. The same team designs, builds and supports your product."
+            title="Four services. One team."
+            subtitle="Pick one or combine them. The same people design, build and support your product, so nothing gets lost in handoffs."
             action={
               <a
                 className="btn-secondary"
@@ -75,7 +70,6 @@ export default function Home({ setActiveNav }) {
             }
           />
 
-          {/* Numbered rows, each with its service photo as a thumbnail. */}
           <NumberedRows
             ariaLabel="Services"
             items={SERVICES.map((service) => ({
@@ -88,9 +82,9 @@ export default function Home({ setActiveNav }) {
                 <Photo
                   photo={service.photo}
                   alt=""
-                  width={168}
+                  width={176}
                   ratio={16 / 10}
-                  sizes="84px"
+                  sizes="88px"
                 />
               ),
             }))}
@@ -98,17 +92,13 @@ export default function Home({ setActiveNav }) {
         </div>
       </section>
 
-      {/* Why Opus Geeks */}
-      <section
-        className="section section-alt why-section"
-        aria-labelledby="why-title"
-      >
+      {/* Why us */}
+      <section className="section section-alt" aria-labelledby="why-title">
         <div className="frame">
           <SectionHead
             eyebrow="Why Opus Geeks"
-            title="What working with us looks like"
+            title="Why teams choose us"
             titleId="why-title"
-            subtitle="Clear ownership, visible progress and a team that stays after launch."
           />
           <NumberedRows
             items={WHY_US.map((item) => ({
@@ -121,48 +111,100 @@ export default function Home({ setActiveNav }) {
       </section>
 
       {/* Industries */}
-      <section className="section">
+      <section className="section" aria-labelledby="industries-title">
         <div className="frame">
           <SectionHead
             eyebrow="Industries"
-            title="Software for regulated, high-stakes industries"
-            subtitle="We know the security, compliance and uptime demands these four sectors bring."
+            title="Built for industries where reliability matters"
+            titleId="industries-title"
           />
 
-          <div className="grid-4 industries-grid">
-            {INDUSTRIES.map((industry, index) => (
-              <Reveal
-                as="div"
+          {/* Each card opens the portfolio filtered to that industry. */}
+          <div className="industries-grid">
+            {INDUSTRIES.map((industry) => (
+              <a
                 className="industry-card has-photo"
                 key={industry.name}
-                delay={staggerDelay(index)}
+                href={`/portfolio?industry=${encodeURIComponent(industry.name)}`}
               >
                 <Photo
                   photo={industry.photo}
                   alt=""
-                  width={400}
-                  ratio={4 / 5}
+                  width={420}
+                  ratio={4 / 3}
                   sizes={SIZES.quarterCard}
                   className="industry-card-photo"
                 />
-                <span className="card-icon-badge">
-                  <Icon name={industry.icon} />
-                </span>
                 <h3>{industry.name}</h3>
                 <p>{industry.detail}</p>
-              </Reveal>
+                <span className="industry-card-link">
+                  See {industry.name.toLowerCase()} work
+                  <Icon name="arrowRight" className="icon-sm" />
+                </span>
+              </a>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Tech stack */}
-      <section className="section tech-marquee-section">
+      {/* Selected work */}
+      <section
+        className="section section-alt"
+        aria-labelledby="selected-work-title"
+      >
         <div className="frame">
           <SectionHead
-            eyebrow="Our stack"
-            title="The stack behind every build"
-            subtitle="Modern, proven technology that keeps your product fast, secure and easy to maintain."
+            eyebrow="Our work"
+            title="Selected projects"
+            titleId="selected-work-title"
+            action={
+              <a
+                className="btn-secondary"
+                href="/portfolio"
+                onClick={goTo("Portfolio")}
+              >
+                View all projects
+                <Icon name="arrowRight" className="icon-sm" />
+              </a>
+            }
+          />
+          <WorkGrid
+            projects={FEATURED_WORK}
+            onOpen={(project) => navigate(`/portfolio/${project.slug}`)}
+          />
+        </div>
+      </section>
+
+      {/* Process */}
+      <section className="section" aria-labelledby="process-title">
+        <div className="frame">
+          <SectionHead
+            eyebrow="How we work"
+            title="A clear process from day one"
+            titleId="process-title"
+          />
+          <NumberedRows
+            ariaLabel="Our process"
+            items={PROCESS_STEPS.map((step) => ({
+              key: step.step,
+              title: step.name,
+              description: step.detail,
+            }))}
+          />
+        </div>
+      </section>
+
+      {/* Tech stack */}
+      <section
+        className="section section-alt tech-marquee-section"
+        aria-labelledby="stack-title"
+      >
+        <div className="frame">
+          <SectionHead
+            eyebrow="Technology"
+            title="Modern, proven technology"
+            titleId="stack-title"
+            subtitle="The tools we reach for on most builds, chosen because they keep products fast, secure and easy to maintain."
           />
           <ul className="sr-only">
             {TECH_STACK.map((tech) => (
@@ -182,47 +224,25 @@ export default function Home({ setActiveNav }) {
         </div>
       </section>
 
-      {/* Process */}
-      <section className="section">
-        <div className="frame">
-          <SectionHead
-            eyebrow="How we work"
-            title="Four stages from brief to release"
-            subtitle="You review and approve each stage before the next one starts, so there are no late surprises."
-          />
-
-          <NumberedRows
-            ariaLabel="Our process"
-            items={PROCESS_STEPS.map((step) => ({
-              key: step.step,
-              title: step.name,
-              description: step.detail,
-            }))}
-          />
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="section section-alt">
+      {/* Testimonials — three cards, all visible, no carousel. */}
+      <section className="section" aria-labelledby="testimonials-title">
         <div className="frame">
           <SectionHead
             eyebrow="Client feedback"
-            title="What clients say about working with us"
+            title="What our clients say"
+            titleId="testimonials-title"
           >
             <RatingSummary />
           </SectionHead>
 
           <div className="grid-3 testimonial-grid">
-            {TESTIMONIALS.map((testimonial, index) => {
+            {TESTIMONIALS.map((testimonial) => {
               const byline = testimonialByline(testimonial);
               return (
-                <Reveal
-                  as="figure"
+                <figure
                   className="card-glass testimonial-card"
                   key={testimonial.company}
-                  delay={staggerDelay(index)}
                 >
-                  <Icon name="quote" className="testimonial-quote-icon" />
                   <StarRating value={testimonial.rating} />
                   <blockquote>{testimonial.quote}</blockquote>
                   <figcaption>
@@ -239,7 +259,7 @@ export default function Home({ setActiveNav }) {
                       company={testimonial.company}
                     />
                   </figcaption>
-                </Reveal>
+                </figure>
               );
             })}
           </div>
@@ -248,21 +268,47 @@ export default function Home({ setActiveNav }) {
         </div>
       </section>
 
-      {/* FAQ preview */}
+      {/* Team */}
       <section
-        className="section faq-preview-section"
-        aria-labelledby="faq-preview-title"
+        className="section section-alt culture-section"
+        aria-labelledby="culture-title"
       >
-        <div className="frame faq-preview-grid">
+        <div className="frame">
           <SectionHead
-            layout="stacked"
-            eyebrow="FAQs"
-            title="Questions we hear before every project"
+            eyebrow="Our team"
+            title={`${TEAM_SIZE_LABEL} people. Two offices. One standard.`}
+            titleId="culture-title"
+            subtitle={`Designers, engineers and product leads in ${COMPANY.cities[0]} and Pembroke Pines, Florida, working as one team.`}
+            action={
+              <div className="culture-actions">
+                <a
+                  className="btn-gradient"
+                  href="/about"
+                  onClick={goTo("About")}
+                >
+                  Meet the team
+                  <Icon name="arrowRight" className="icon-sm" />
+                </a>
+                <a className="btn-secondary" href="/careers">
+                  See open roles
+                </a>
+              </div>
+            }
+          />
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="section" aria-labelledby="faq-preview-title">
+        <div className="frame">
+          <SectionHead
+            eyebrow="FAQ"
+            title="Questions, answered"
             titleId="faq-preview-title"
-            subtitle="Short answers on timelines, process and support."
             action={
               <a className="btn-secondary" href="/faqs" onClick={goTo("FAQs")}>
-                Read all FAQs <Icon name="arrowRight" className="icon-sm" />
+                See all FAQs
+                <Icon name="arrowRight" className="icon-sm" />
               </a>
             }
           />
@@ -270,70 +316,7 @@ export default function Home({ setActiveNav }) {
         </div>
       </section>
 
-      {/* Team & culture — photo grid only with real photos; otherwise a
-          clean text-only layout (no stock people presented as our team). */}
-      <section
-        className={`section section-alt culture-section ${showTeamPhotos ? "" : "is-text-only"}`}
-        aria-labelledby="culture-title"
-      >
-        <div className="frame culture-grid">
-          <Reveal as="div" className="culture-copy">
-            <p className="ed-eyebrow">Life at Opus Geeks</p>
-            <h2 className="section-title" id="culture-title">
-              {TEAM_SIZE_LABEL} people in {COMPANY.cities.join(" and ")}
-            </h2>
-            <p className="section-subtitle">
-              Designers, engineers and product leads who share one backlog and
-              one standard for quality.
-            </p>
-            <ul className="culture-facts" aria-label="Team at a glance">
-              <li>
-                <strong>{TEAM_SIZE_LABEL}</strong> people
-              </li>
-              <li>
-                <strong>{COMPANY.offices}</strong> offices
-              </li>
-              <li>
-                <strong>{SERVICES.length}</strong> service lines
-              </li>
-            </ul>
-            <div className="culture-actions">
-              <a className="btn-gradient" href="/about" onClick={goTo("About")}>
-                Meet the team <Icon name="arrowRight" className="icon-sm" />
-              </a>
-              <a className="btn-secondary" href="/careers">
-                See open roles
-              </a>
-            </div>
-          </Reveal>
-          {/* TODO(content): add real office/team photos to TEAM_PHOTOS
-              (data/site.js) and set CONTENT.showTeamPhotos = true. */}
-          {showTeamPhotos && (
-            <div className="culture-photos">
-              {teamPhotos.map((photo, index) => (
-                <Reveal
-                  as="figure"
-                  key={photo.src}
-                  className={`culture-photo ${index === 0 ? "is-large" : ""}`}
-                  delay={staggerDelay(index)}
-                >
-                  <img
-                    src={photo.src}
-                    alt={photo.alt}
-                    width={photo.width}
-                    height={photo.height}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                  {photo.caption && <figcaption>{photo.caption}</figcaption>}
-                </Reveal>
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* The closing CTA opens the footer now (data/cta.js). */}
+      {/* The closing CTA opens the footer (data/cta.js). */}
     </div>
   );
 }

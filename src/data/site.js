@@ -55,7 +55,7 @@ export const SERVICES = [
     photo: PHOTOS.serviceWeb,
     detailPhoto: PHOTOS.serviceWebDetail,
     icon: "browser",
-    card: "Web apps, dashboards and online stores that load fast and stay easy to change.",
+    card: "Fast, secure websites, dashboards and platforms that are easy to grow.",
     summary:
       "Custom web applications, customer portals and e-commerce builds with clean front-end code, search-friendly pages and hosting we set up and maintain.",
     highlights: [
@@ -65,8 +65,8 @@ export const SERVICES = [
     ],
   },
   {
-    name: "UX/UI Design",
-    cta: "Explore UX/UI design",
+    name: "UI/UX Design",
+    cta: "Explore UI/UX design",
     slug: "ux-ui-design",
     hash: "ux-ui-design",
     // Short line for the navbar dropdown.
@@ -75,7 +75,7 @@ export const SERVICES = [
     photo: PHOTOS.serviceUx,
     detailPhoto: PHOTOS.serviceUxDetail,
     icon: "pen",
-    card: "Research, wireframes and tested prototypes, so you build the right screens first.",
+    card: "Research, wireframes and tested prototypes, so you build the right thing first.",
     summary:
       "We talk to your users, map the key journeys and test clickable prototypes before development starts, so engineering time goes into screens that work.",
     highlights: [
@@ -95,7 +95,7 @@ export const SERVICES = [
     photo: PHOTOS.serviceGame,
     detailPhoto: PHOTOS.serviceGameDetail,
     icon: "gamepad",
-    card: "2D and 3D mobile games and VR training, from first prototype to live updates.",
+    card: "2D, 3D and VR games and training simulations, from prototype to live updates.",
     summary:
       "Mobile games and VR experiences built in modern engines. We design the mechanics, build the levels and support the game with updates after release.",
     highlights: [
@@ -111,52 +111,50 @@ export const INDUSTRIES = [
     name: "Fintech",
     icon: "chart",
     photo: PHOTOS.industryFintech,
-    detail: "Payments, banking and lending apps with secure, auditable data flows.",
+    detail: "Secure payments, banking and lending apps.",
   },
   {
     name: "Healthcare",
     icon: "heart",
     photo: PHOTOS.industryHealthcare,
-    detail: "Patient portals and telehealth tools designed with HIPAA in mind.",
+    detail: "HIPAA-aware portals for patients and providers.",
   },
   {
     name: "Retail",
     icon: "bag",
     photo: PHOTOS.industryRetail,
-    detail: "Storefronts, inventory and loyalty systems that hold up on sale days.",
+    detail: "Online stores, inventory and loyalty systems.",
   },
   {
     name: "Real Estate",
     icon: "building",
     photo: PHOTOS.industryRealEstate,
-    detail: "Listing, CRM and property tools that keep every lead in one place.",
+    detail: "Listings, CRM and property management tools.",
   },
 ];
 
 export const PROCESS_STEPS = [
   {
     step: "01",
-    name: "Branding",
-    icon: "layers",
-    detail: "We agree on your users, positioning and the scope of the first release.",
+    name: "Discover",
+    detail:
+      "We learn your goals, users and constraints, and agree on the scope.",
   },
   {
     step: "02",
-    name: "Prototype",
-    icon: "pen",
-    detail: "You click through the key flows and give feedback before any code is written.",
+    name: "Design",
+    detail:
+      "You click through real prototypes and give feedback before code is written.",
   },
   {
     step: "03",
-    name: "Development",
-    icon: "code",
-    detail: "We build and test in short cycles and demo working software as we go.",
+    name: "Build",
+    detail: "Short cycles with weekly demos, testing as we go.",
   },
   {
     step: "04",
-    name: "Launch",
-    icon: "rocket",
-    detail: "We release to production and the stores, then monitor and support it.",
+    name: "Launch & support",
+    detail: "We release, monitor and keep improving your product.",
   },
 ];
 
@@ -165,28 +163,22 @@ export const PROCESS_STEPS = [
 // gets a single named project lead before launch; reword if not.
 export const WHY_US = [
   {
-    icon: "users",
-    title: "Design and code in one team",
-    detail:
-      "Designers and engineers work side by side, so nothing gets lost in a handoff.",
+    title: "One team, idea to launch",
+    detail: "Designers and engineers work side by side, so decisions happen fast.",
   },
   {
-    icon: "clock",
-    title: "Progress you can see",
+    title: "Weekly demos, no surprises",
     detail:
-      "Regular demos and written updates show what shipped and what comes next.",
+      "You see working software every week and always know what's next.",
   },
   {
-    icon: "check",
-    title: "One accountable lead",
+    title: "A lead who owns your project",
     detail:
-      "A single project lead owns your timeline and answers your questions.",
+      "One accountable person who knows your product and answers your questions.",
   },
   {
-    icon: "shield",
     title: "Support after launch",
-    detail:
-      "Maintenance, monitoring and new features once your product is live.",
+    detail: "Monitoring, fixes and new features once your product is live.",
   },
 ];
 
@@ -305,7 +297,7 @@ export const SOCIALS = [
 ];
 
 export const TAGLINE =
-  "Web platforms, mobile apps, product design and games for startups and growing companies.";
+  "Mobile apps, web platforms, product design and games for startups and growing companies.";
 
 // Home "Life at Opus Geeks" photo grid. While empty (or
 // CONTENT.showTeamPhotos is false) the section shows a text-only layout.

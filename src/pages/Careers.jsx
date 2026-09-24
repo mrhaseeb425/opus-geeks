@@ -2,13 +2,11 @@ import Icon from "../components/Icon";
 import NumberedRows from "../components/NumberedRows";
 import PageHeader from "../components/PageHeader";
 import Photo from "../components/Photo";
-import Reveal from "../components/Reveal";
 import SectionHead from "../components/SectionHead";
 import { CAREERS_EMAIL, OPEN_ROLES, PERKS } from "../data/careers";
 import { PHOTOS } from "../data/photos";
 import { CONTACT } from "../data/site";
 import { COMPANY, TEAM_SIZE_LABEL } from "../data/stats";
-import { staggerDelay } from "../lib/stagger";
 
 const email = CAREERS_EMAIL ?? CONTACT.email;
 const cvHref = `mailto:${email}?subject=${encodeURIComponent("Open application — Opus Geeks")}`;
@@ -53,11 +51,9 @@ export default function Careers() {
           </div>
           <div className="photo-gallery careers-gallery">
             {GALLERY.map((photo, index) => (
-              <Reveal
-                as="figure"
+              <figure
                 className={`photo-tile ${index === 0 ? "is-wide" : ""}`}
                 key={photo.id}
-                delay={staggerDelay(index)}
               >
                 <Photo
                   photo={photo}
@@ -70,7 +66,7 @@ export default function Careers() {
                       : "(max-width: 960px) 46vw, 280px"
                   }
                 />
-              </Reveal>
+              </figure>
             ))}
           </div>
         </div>

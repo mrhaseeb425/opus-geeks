@@ -1,8 +1,6 @@
 import { useState } from "react";
-import { staggerDelay } from "../lib/stagger";
 import { rowNumber } from "../lib/rows";
 import Icon from "./Icon";
-import Reveal from "./Reveal";
 
 // Single-open accordion shared by the FAQs page and the Home FAQ preview.
 // Laid out as numbered rows (number, question, chevron, hairline divider) to
@@ -19,11 +17,9 @@ export default function FaqAccordion({ items, idPrefix = "faq" }) {
         const questionId = `${idPrefix}-question-${index}`;
         const answerId = `${idPrefix}-answer-${index}`;
         return (
-          <Reveal
-            as="div"
+          <div
             className={`faq-item ${isOpen ? "is-open" : ""}`}
             key={item.question}
-            delay={staggerDelay(index, 0.06)}
           >
             <button
               type="button"
@@ -57,7 +53,7 @@ export default function FaqAccordion({ items, idPrefix = "faq" }) {
                 <p className="faq-answer">{item.answer}</p>
               </div>
             </div>
-          </Reveal>
+          </div>
         );
       })}
     </div>

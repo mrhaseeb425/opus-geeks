@@ -1,96 +1,19 @@
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import CaseStudyContent from "../components/CaseStudyContent";
 import Drawer from "../components/Drawer";
 import Icon from "../components/Icon";
 import PageHeader from "../components/PageHeader";
-import Reveal from "../components/Reveal";
+import WorkGrid from "../components/WorkGrid";
 import { Initials, StarRating } from "../components/Testimonial";
 import {
   findProject,
   PROJECT_FILTERS,
   PROJECTS,
-  splitResult,
 } from "../data/projects";
 import { TESTIMONIALS, testimonialByline } from "../data/site";
 import { statValue } from "../data/stats";
-import Photo from "../components/Photo";
 import { navigate } from "../lib/router";
-import { rowNumber } from "../lib/rows";
-import { staggerDelay } from "../lib/stagger";
-
-// Cards show the 2 most important technologies; the rest live in the case
-// study.
-const CARD_STACK_LIMIT = 2;
-const WORK_SIZES = "(max-width: 860px) calc(100vw - 36px), 600px";
-
-// One entry in the staggered editorial grid: a large image, then number,
-// title, one-line summary, tags and the key result metric.
-function ProjectCard({ project, index, onOpen }) {
-  const [hasImageError, setHasImageError] = useState(false);
-  const href = `/portfolio/${project.slug}`;
-  const metric = splitResult(project.metric);
-
-  return (
-    <Reveal
-      as="article"
-      className="ed-work-item"
-      delay={staggerDelay(index)}
-      disabled={index < 2}
-    >
-      <a
-        className="ed-work-link"
-        href={href}
-        onClick={(event) => {
-          event.preventDefault();
-          onOpen(project);
-        }}
-      >
-        <div className="ed-work-media">
-          {hasImageError ? (
-            <span className="portfolio-image-fallback">
-              Preview unavailable
-            </span>
-          ) : (
-            // The photo's blurred preview shows while it loads.
-            <Photo
-              photo={project.image}
-              width={600}
-              ratio={4 / 3}
-              sizes={WORK_SIZES}
-              priority={index === 0}
-              loading={index < 2 ? "eager" : "lazy"}
-              onError={() => setHasImageError(true)}
-            />
-          )}
-          <span className="ed-work-industry">{project.industry}</span>
-        </div>
-
-        <div className="ed-work-body">
-          <span className="ed-work-num" aria-hidden="true">
-            {rowNumber(index)}
-          </span>
-          <div>
-            <h3 className="ed-work-title">{project.title}</h3>
-            <p className="ed-work-summary">{project.summary}</p>
-            <div className="ed-work-tags">
-              <span className="ed-tag is-accent">{project.category}</span>
-              {project.stack.slice(0, CARD_STACK_LIMIT).map((tech) => (
-                <span className="ed-tag" key={tech}>
-                  {tech}
-                </span>
-              ))}
-            </div>
-          </div>
-          <p className="ed-work-result">
-            <strong>{metric.value}</strong>
-            <span>{metric.label}</span>
-          </p>
-        </div>
-      </a>
-    </Reveal>
-  );
-}
 
 function TestimonialCarousel() {
   const [index, setIndex] = useState(0);
@@ -134,15 +57,7 @@ function TestimonialCarousel() {
         </div>
       </div>
       <div aria-live="polite">
-        <AnimatePresence mode="wait" initial={false}>
-          <motion.figure
-            key={index}
-            className="portfolio-testimonial-card"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-          >
+          <figure className="portfolio-testimonial-card">
             <Icon name="quote" className="testimonial-quote-icon" />
             <StarRating value={testimonial.rating} />
             <blockquote>{testimonial.quote}</blockquote>
@@ -153,16 +68,22 @@ function TestimonialCarousel() {
                 <span>{byline.secondary}</span>
               </span>
             </figcaption>
-          </motion.figure>
-        </AnimatePresence>
+          </figure>
       </div>
     </section>
   );
 }
 
+// /portfolio?industry=Fintech arrives from the Home industry cards; it seeds
+// the search box, so the filter is visible and clearable like any other.
+function initialQuery() {
+  if (typeof window === "undefined") return "";
+  return new URLSearchParams(window.location.search).get("industry") ?? "";
+}
+
 export default function Portfolio({ previewSlug, setActiveNav }) {
   const [activeFilter, setActiveFilter] = useState("All");
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(initialQuery);
   const searchInputRef = useRef(null);
   const previewProject = previewSlug ? findProject(previewSlug) : null;
 
@@ -281,6 +202,10 @@ export default function Portfolio({ previewSlug, setActiveNav }) {
             </div>
           </div>
 
+          {/* Keeps the heading order h1 -> h2 -> h3: the project titles in the
+              grid below are h3s. */}
+          <h2 className="sr-only">All projects</h2>
+
           <div className="portfolio-results-meta" aria-live="polite">
             <span>
               {filteredProjects.length}{" "}
@@ -294,16 +219,7 @@ export default function Portfolio({ previewSlug, setActiveNav }) {
           </div>
 
           {filteredProjects.length > 0 ? (
-            <div className="ed-work">
-              {filteredProjects.map((project, index) => (
-                <ProjectCard
-                  key={project.slug}
-                  project={project}
-                  index={index}
-                  onOpen={openProject}
-                />
-              ))}
-            </div>
+            <WorkGrid projects={filteredProjects} onOpen={openProject} />
           ) : (
             <div className="portfolio-empty-state">
               <Icon name="search" className="empty-state-icon" />

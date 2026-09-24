@@ -6,7 +6,6 @@ import Icon from "../components/Icon";
 import NumberedRows from "../components/NumberedRows";
 import PageHeader from "../components/PageHeader";
 import Photo from "../components/Photo";
-import Reveal from "../components/Reveal";
 import { BLOG_CATEGORIES, findPost, POSTS } from "../data/posts";
 import { navigate } from "../lib/router";
 
@@ -114,7 +113,7 @@ export default function Blogs({ previewSlug }) {
           </div>
           {featured ? (
             <>
-              <Reveal as="article" className="blog-featured-card">
+              <article className="blog-featured-card">
                 <div className="blog-featured-copy">
                   <span className="blog-category-badge">
                     {featured.category}
@@ -148,7 +147,7 @@ export default function Blogs({ previewSlug }) {
                     className="blog-featured-image"
                   />
                 </a>
-              </Reveal>
+              </article>
               {rest.length > 0 && (
                 <>
                   <div className="ed-index-head">

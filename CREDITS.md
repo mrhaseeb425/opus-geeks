@@ -1,18 +1,19 @@
 # Photo credits
 
-Every photo on the site comes from [Pexels](https://www.pexels.com/license/) (free for commercial use; attribution not required, given here anyway). No photo is used twice. The registry is `src/data/photos.js`; photos are served same-origin under `/img` as AVIF, WebP and JPEG (`src/lib/images.js`).
+Every photo on the site comes from [Pexels](https://www.pexels.com/license/) (free for commercial use; attribution not required, given here anyway). No photo is used twice. The registry is `src/data/photos.js`; photos are served same-origin under `/img` as AVIF, WebP and JPEG (`src/lib/images.js`). Photos load sharp on a neutral surface — there are no blur-up previews.
 
 The About gallery shows generic workspace scenes with no people, and the Careers photos are generic collaboration scenes. Neither is captioned or described as the Opus Geeks team or office. Replace both with real office photos when available.
 
 | Key | Page › section | Photo | Photographer |
 | --- | --- | --- | --- |
+| `heroWork` | Home › Hero | [Woman Coding on Computer](https://www.pexels.com/photo/woman-coding-on-computer-3861958/) | ThisIsEngineering |
 | `serviceApp` | Home › Services › App Development card | [A Person Holding a Smartphone with a Blank Screen](https://www.pexels.com/photo/a-person-holding-a-smartphone-with-a-blank-screen-6373215/) | KATRIN BOLOVTSOVA |
 | `serviceWeb` | Home › Services › Web Development card | [Close-up Photo of Gray Laptop](https://www.pexels.com/photo/close-up-photo-of-gray-laptop-577210/) | Lukas Blazek |
-| `serviceUx` | Home › Services › UX/UI Design card | [Notebook Beside the Iphone on Table](https://www.pexels.com/photo/notebook-beside-the-iphone-on-table-196644/) | picjumbo.com |
+| `serviceUx` | Home › Services › UI/UX Design card | [Notebook Beside the Iphone on Table](https://www.pexels.com/photo/notebook-beside-the-iphone-on-table-196644/) | picjumbo.com |
 | `serviceGame` | Home › Services › Game Development card | [Selective Focus of a DualShock](https://www.pexels.com/photo/selective-focus-of-a-dualshock-7773745/) | Artem Podrez |
 | `serviceAppDetail` | Services › App Development | [A Close-Up Shot of a Smartphone beside a Laptop](https://www.pexels.com/photo/a-close-up-shot-of-a-smartphone-beside-a-laptop-8171308/) | Firos nv |
 | `serviceWebDetail` | Services › Web Development | [Close Up Photo of Programming of Codes](https://www.pexels.com/photo/close-up-photo-of-programming-of-codes-546819/) | luis gomes |
-| `serviceUxDetail` | Services › UX/UI Design | [Close-Up Shot of an Ipad](https://www.pexels.com/photo/close-up-shot-of-an-ipad-11813187/) | Davide Baraldi |
+| `serviceUxDetail` | Services › UI/UX Design | [Close-Up Shot of an Ipad](https://www.pexels.com/photo/close-up-shot-of-an-ipad-11813187/) | Davide Baraldi |
 | `serviceGameDetail` | Services › Game Development | [Double Monitor PC Setup on Desk](https://www.pexels.com/photo/double-monitor-pc-setup-on-desk-18304033/) | minhphuc .workspace |
 | `industryFintech` | Home › Industries › Fintech | [Contactless Payment with Credit Card](https://www.pexels.com/photo/contactless-payment-with-credit-card-11009960/) | Towfiqu barbhuiya |
 | `industryHealthcare` | Home › Industries › Healthcare | [A Doctor Writing a Diagnosis](https://www.pexels.com/photo/a-doctor-writing-a-diagnosis-5407218/) | Tima Miroshnichenko |

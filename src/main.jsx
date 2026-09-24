@@ -9,6 +9,7 @@ import "./styles/sections.css";
 import "./styles/theme.css";
 import "./styles/type.css";
 import "./styles/editorial.css";
+import "./styles/system.css";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

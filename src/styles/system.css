@@ -1,0 +1,1227 @@
+/* ==========================================================================
+   Design system — loaded last (see main.jsx), so it owns the tokens and the
+   primitives every page is built from. Nothing here is page-specific.
+
+   1. Tokens: color, type scale, spacing, radius
+   2. Base elements and headings
+   3. Container and section rhythm
+   4. Buttons
+   5. Numbered rows
+   6. Cards, dividers and surfaces
+   7. Decoration removed (no blurred blobs in light mode)
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Tokens
+   -------------------------------------------------------------------------- */
+
+:root {
+  color-scheme: light;
+
+  /* Surfaces: white page, one alternating tone. */
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --surface-2: #f6f7fb;
+  --surface-3: #eceef4;
+  --surface-alt: #f6f7fb;
+  --surface-glass: rgba(255, 255, 255, 0.92);
+
+  /* Dividers: 1px, low contrast. */
+  --border: #e4e7ef;
+  --border-strong: #c9cedd;
+
+  /* Text — every value below passes WCAG AA (4.5:1) on --bg, --surface-alt
+     and --surface-3. Verified, not estimated. */
+  --text-strong: #0d1220;
+  --text-body: #3d4657;
+  --text-muted: #5a6478;
+  --text-subtle: #616a7d;
+
+  /* One accent blue. The gradient is reserved for the hero's one word. */
+  --accent: #1d5cff;
+  --accent-hover: #1449d6;
+  --accent-text: #1450e0;
+  --accent-soft: #eef3ff;
+  --accent-border: #c3d6ff;
+  --star: #c2730a;
+
+  --shadow-card: 0 1px 2px rgba(13, 18, 32, 0.04);
+  --shadow-raised: 0 8px 24px rgba(13, 18, 32, 0.08);
+  --overlay: rgba(6, 10, 22, 0.55);
+
+  /* The hero stage is dark in both themes. */
+  --hero-bg-start: #101a33;
+  --hero-bg-end: #0a0f1e;
+  --hero-glow: rgba(59, 123, 255, 0.2);
+  --hero-edge: transparent;
+  --hero-text: #f4f7ff;
+  --hero-muted: #b6c3d8;
+  --hero-accent-text: #a8c5ff;
+  --hero-chip-bg: rgba(59, 123, 255, 0.14);
+  --hero-chip-border: rgba(133, 175, 255, 0.3);
+
+  /* Type scale. Desktop → mobile, both ends stated in px in the comments. */
+  --fs-h1: clamp(2.5rem, 1.35rem + 3.6vw, 4.5rem); /* 40 → 72 */
+  --fs-h1-page: clamp(2.25rem, 1.4rem + 2.7vw, 3.5rem); /* 36 → 56 */
+  --fs-h2: clamp(2rem, 1.42rem + 1.8vw, 3rem); /* 32 → 48 */
+  --fs-h3: clamp(1.25rem, 1rem + 0.9vw, 1.625rem); /* 20 → 26 */
+  --fs-lead: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem); /* 17 → 20 */
+  --fs-body: clamp(1rem, 0.93rem + 0.22vw, 1.125rem); /* 16 → 18 */
+  --fs-card: clamp(1rem, 0.96rem + 0.13vw, 1.0625rem); /* 16 → 17 */
+  --fs-meta: 0.875rem; /* 14 */
+  --fs-eyebrow: 0.75rem; /* 12 */
+
+  --lh-body: 1.6;
+  --measure: 62ch;
+  --tracking-tight: -0.025em;
+
+  /* Spacing and shape. */
+  --frame-max: 1280px;
+  --frame-pad: 32px;
+  --section-y: 128px;
+  --section-y-tight: 80px;
+  --head-gap: clamp(40px, 4vw, 64px);
+  --radius-card: 20px;
+  --radius-media: 20px;
+  --btn-h: 52px;
+  --btn-pad: 22px;
+  --row-min-h: 112px;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg: #0a0f1e;
+  --surface: #111829;
+  --surface-2: #0f1629;
+  --surface-3: #1a2338;
+  --surface-alt: #0f1629;
+  --surface-glass: rgba(15, 22, 41, 0.94);
+
+  --border: #1f2942;
+  --border-strong: #33405e;
+
+  --text-strong: #f2f6fd;
+  --text-body: #c6d0e0;
+  --text-muted: #9aa7bd;
+  --text-subtle: #8593ab;
+
+  /* White button text needs 4.5:1 against this, so the fill is a step
+     deeper than the accent used for links (--accent-text). */
+  --accent: #2560f0;
+  --accent-hover: #1a4fd6;
+  --accent-text: #7fb0ff;
+  --accent-soft: rgba(59, 123, 255, 0.16);
+  --accent-border: rgba(127, 176, 255, 0.34);
+  --star: #f0b429;
+
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-raised: 0 8px 24px rgba(0, 0, 0, 0.4);
+  --overlay: rgba(2, 5, 13, 0.7);
+
+  --hero-bg-start: #101a33;
+  --hero-bg-end: #0a0f1e;
+  --hero-edge: var(--border);
+}
+
+@media (max-width: 1100px) {
+  :root {
+    --section-y: 80px;
+    --section-y-tight: 56px;
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --frame-pad: 20px;
+    --section-y: 64px;
+    --section-y-tight: 48px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   2. Base elements
+   -------------------------------------------------------------------------- */
+
+body {
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--text-body);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  color: var(--text-strong);
+}
+
+/* H1 — hero and page titles. */
+.home-hero-title,
+.ed-page-head h1,
+.page-header h1,
+.services-hero-title,
+.case-study-page .case-study-title,
+.article-page .article-title {
+  font-size: var(--fs-h1-page);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+.home-hero-title {
+  font-size: var(--fs-h1);
+}
+
+/* H2 — section titles. */
+.section-title,
+.ed-index-head h2,
+.footer-cta h2,
+.blog-featured-copy h2,
+.cs-block h2 {
+  font-size: var(--fs-h2);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+}
+
+/* H3 — row titles and card titles. */
+.ed-row-title,
+.ed-work-title,
+.card-glass h3,
+.industry-card h3,
+.team-card h3,
+.value-card h3,
+.perk-card h3,
+.blog-card-copy h3,
+.roles-empty h3,
+.faq-list.ed-rows .faq-question,
+.service-feature-copy h2,
+.case-study-sections h3 {
+  font-size: var(--fs-h3);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+/* Body copy: 16 → 18px, 1.6, ~62ch. */
+p,
+li {
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+
+.section-subtitle,
+.page-header-subtitle,
+.home-hero-lede,
+.services-hero-subtitle,
+.case-study-lede,
+.article-lede {
+  max-width: var(--measure);
+  font-size: var(--fs-lead);
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
+.about-copy,
+.cs-block p,
+.case-study-sections p,
+.blog-rich-copy p,
+.faq-answer,
+.roles-empty p,
+.ed-row-desc,
+.ed-work-summary,
+.card-glass p,
+.industry-card p,
+.team-card p,
+.value-card p,
+.perk-card p,
+.blog-card-copy p {
+  max-width: var(--measure);
+  font-size: var(--fs-card);
+  line-height: var(--lh-body);
+}
+
+.about-copy,
+.cs-block p,
+.case-study-sections p,
+.blog-rich-copy p,
+.faq-answer {
+  color: var(--text-body);
+}
+
+/* Small print and eyebrows. */
+.ed-row-meta,
+.ed-index-count,
+.ed-work-result span,
+.portfolio-results-meta,
+.footer-bottom-inner p {
+  font-size: var(--fs-meta);
+}
+
+.ed-eyebrow,
+.section-eyebrow,
+.logo-strip-title {
+  font-size: var(--fs-eyebrow);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* --------------------------------------------------------------------------
+   3. Container and section rhythm
+   -------------------------------------------------------------------------- */
+
+.frame {
+  width: 100%;
+  max-width: calc(var(--frame-max) + var(--frame-pad) * 2);
+  margin-inline: auto;
+  padding-inline: var(--frame-pad);
+}
+
+.section {
+  padding: var(--section-y) 0;
+}
+
+.section-tight {
+  padding: var(--section-y-tight) 0;
+}
+
+/* One alternating tone, no gradient wash. */
+.section-alt {
+  background: var(--surface-alt);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.app-shell {
+  background: var(--bg);
+  color: var(--text-body);
+}
+
+/* --------------------------------------------------------------------------
+   4. Buttons
+   -------------------------------------------------------------------------- */
+
+.btn-gradient,
+.btn-secondary,
+.cta-button,
+.blog-read-button,
+.faq-cta-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: var(--btn-h);
+  padding: 0 var(--btn-pad);
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease;
+}
+
+.btn-gradient,
+.cta-button,
+.blog-read-button,
+.faq-cta-button {
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: #fff;
+  box-shadow: none;
+}
+
+.btn-gradient:hover,
+.cta-button:hover,
+.blog-read-button:hover,
+.faq-cta-button:hover {
+  border-color: var(--accent-hover);
+  background: var(--accent-hover);
+  box-shadow: none;
+}
+
+.btn-secondary {
+  border: 1px solid var(--border-strong);
+  background: transparent;
+  color: var(--text-strong);
+}
+
+.btn-secondary:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent-text);
+}
+
+/* On the dark hero and the dark footer. */
+.btn-secondary-on-dark,
+.home-hero .btn-secondary,
+.footer-cta .btn-secondary {
+  border-color: rgba(214, 226, 247, 0.38);
+  background: transparent;
+  color: #eaf1fd;
+}
+
+.btn-secondary-on-dark:hover,
+.home-hero .btn-secondary:hover,
+.footer-cta .btn-secondary:hover {
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+:where(a, button, input, textarea, select, [tabindex]):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.home-hero :focus-visible,
+.site-footer :focus-visible {
+  outline-color: #9dc0ff;
+}
+
+/* --------------------------------------------------------------------------
+   5. Numbered rows
+   -------------------------------------------------------------------------- */
+
+.ed-rows {
+  border-top: 1px solid var(--border);
+}
+
+.ed-row {
+  border-bottom: 1px solid var(--border);
+}
+
+.ed-row-inner,
+.faq-list.ed-rows .faq-question {
+  min-height: var(--row-min-h);
+  padding-block: 20px;
+}
+
+.ed-row-num,
+.ed-work-num,
+.ed-next-steps li::before {
+  font-size: 1rem; /* 16px */
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+}
+
+.ed-row-desc {
+  font-size: 1.0625rem; /* 17px */
+}
+
+.ed-row-arrow,
+.faq-list.ed-rows .faq-chevron {
+  width: 44px;
+  height: 44px;
+  box-sizing: border-box;
+  padding: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: 50%;
+  color: var(--text-muted);
+}
+
+.faq-list.ed-rows .faq-chevron {
+  padding: 12px;
+}
+
+a.ed-row-inner:hover .ed-row-arrow .icon,
+a.ed-row-inner:focus-visible .ed-row-arrow .icon {
+  transform: translateX(4px);
+}
+
+/* The whole row shifts, not just the arrow. */
+a.ed-row-inner:hover {
+  padding-left: 10px;
+}
+
+/* --------------------------------------------------------------------------
+   6. Cards, dividers and surfaces
+   -------------------------------------------------------------------------- */
+
+.card-glass,
+.industry-card,
+.team-card,
+.value-card,
+.perk-card,
+.portfolio-card,
+.blog-featured-card,
+.blog-card-premium,
+.testimonial-card,
+.review-badge > a,
+.review-badge > div,
+.roles-empty,
+.cs-block,
+.portfolio-testimonial-card {
+  border-radius: var(--radius-card);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: none;
+}
+
+.card-glass:hover,
+.portfolio-card:hover,
+.industry-card:hover,
+.team-card:hover {
+  border-color: var(--border-strong);
+  box-shadow: none;
+  transform: none;
+}
+
+/* Image frames sit on a neutral surface, so a photo that has not arrived yet
+   reads as a placeholder rather than a hole in the page. */
+.ed-work-media,
+.cs-cover,
+.photo-tile,
+.culture-photo,
+.ed-row-thumb,
+.blog-featured-image-wrap,
+.blog-card-image-wrap {
+  overflow: hidden;
+  border-radius: var(--radius-media);
+  border: 1px solid var(--border);
+  background: var(--surface-3);
+  box-shadow: none;
+}
+
+hr,
+.footer-bottom {
+  border-color: var(--border);
+}
+
+/* --------------------------------------------------------------------------
+   7. Decoration removed
+   -------------------------------------------------------------------------- */
+
+/* No blurred blobs or gradient washes behind content in either theme; the
+   hero keeps one soft glow of its own. */
+.home-ambient,
+.ambient-orb,
+.services-hero::before,
+.services-hero::after,
+.page-hero::before {
+  display: none !important;
+}
+
+.services-page,
+.home-page,
+.page-hero {
+  background: none;
+}
+
+.stats-strip,
+.ed-stats-strip {
+  background: var(--bg);
+}
+
+/* --------------------------------------------------------------------------
+   8. Home: hero photograph, industry cards, stack pills, testimonials
+   -------------------------------------------------------------------------- */
+
+.home-hero-photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-media);
+  object-fit: cover;
+  background: #101a33;
+}
+
+.home-hero-visual {
+  overflow: hidden;
+  border-radius: var(--radius-media);
+  border: 1px solid rgba(160, 190, 240, 0.18);
+  aspect-ratio: 4 / 3;
+}
+
+.home-hero-eyebrow {
+  font-size: var(--fs-eyebrow);
+  letter-spacing: 0.12em;
+}
+
+.home-hero-lede {
+  color: var(--hero-muted);
+}
+
+.home-hero-trust {
+  color: var(--hero-muted);
+  font-size: var(--fs-meta);
+}
+
+/* Four industry cards in one row, every one visible. */
+.industries-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(16px, 1.8vw, 24px);
+}
+
+/* A stacked card: photo on top at a fixed ratio, then title and copy, so all
+   four line up on every row instead of bottom-anchoring over the image. */
+.industry-card,
+.industry-card.has-photo {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0;
+  border-radius: var(--radius-card);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-body);
+}
+
+.industry-card.has-photo::before {
+  content: none;
+}
+
+.industry-card .industry-card-photo,
+.industry-card.has-photo .industry-card-photo {
+  position: static;
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  background: var(--surface-3);
+  transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.industry-card h3,
+.industry-card.has-photo h3 {
+  margin: 20px 20px 8px;
+  color: var(--text-strong);
+}
+
+.industry-card p,
+.industry-card.has-photo p {
+  margin: 0 20px 22px;
+  color: var(--text-muted);
+}
+
+@media (max-width: 960px) {
+  .industries-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .industries-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Stack pills: larger type, paused on hover. */
+.tech-chip {
+  padding: 12px 22px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text-body);
+  font-size: 1rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.tech-marquee:hover .tech-marquee-track,
+.tech-marquee:focus-within .tech-marquee-track,
+.tech-marquee.is-offscreen .tech-marquee-track {
+  animation-play-state: paused;
+}
+
+/* Testimonials: three cards, all visible. */
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 1.8vw, 24px);
+}
+
+.testimonial-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0;
+  padding: clamp(24px, 2.4vw, 32px);
+}
+
+.testimonial-card blockquote {
+  margin: 0;
+  color: var(--text-body);
+  font-size: var(--fs-card);
+  line-height: var(--lh-body);
+}
+
+.testimonial-card figcaption {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 8px;
+}
+
+.testimonial-byline {
+  display: grid;
+  gap: 2px;
+}
+
+.testimonial-byline strong {
+  color: var(--text-strong);
+  font-size: 0.95rem;
+}
+
+.testimonial-byline > span {
+  color: var(--text-muted);
+  font-size: var(--fs-meta);
+}
+
+@media (max-width: 900px) {
+  .testimonial-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.culture-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 0;
+}
+
+/* A header whose right column carries only a button still bottom-aligns. */
+.section-head.is-editorial .ed-head-aside:empty {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   9. Site chrome: header, brand, toggles, filters, badges
+   One accent blue everywhere; the gradient stays in the hero headline.
+   -------------------------------------------------------------------------- */
+
+.site-header,
+.site-header.is-scrolled {
+  background: #0a0f1e;
+  border-bottom: 1px solid rgba(203, 219, 245, 0.12);
+  box-shadow: none;
+}
+
+.brand-primary {
+  color: #f2f6fd;
+}
+
+.brand-secondary {
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  color: #7fb0ff;
+}
+
+/* Header call-to-action: a plain accent pill, no gradient or shimmer. */
+.cta-button-glass,
+.mobile-cta-button {
+  min-width: 0;
+  min-height: 44px;
+  padding: 0 20px;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  box-shadow: none;
+}
+
+.cta-button-glass::before,
+.cta-button-glass::after {
+  content: none;
+}
+
+.cta-button-glass:hover,
+.mobile-cta-button:hover {
+  border-color: var(--accent-hover);
+  background: var(--accent-hover);
+  box-shadow: none;
+}
+
+.theme-toggle-track {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(203, 219, 245, 0.22);
+  box-shadow: none;
+}
+
+.theme-toggle-thumb {
+  background: #f2f6fd;
+  color: #0a0f1e;
+  box-shadow: none;
+}
+
+/* Filter chips, tags and badges all share one flat pill. */
+.portfolio-filter,
+.blog-filters button,
+.tag-pill,
+.blog-category-badge,
+.service-badge,
+.tech-badge {
+  min-height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--text-muted);
+  font-size: var(--fs-meta);
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  box-shadow: none;
+}
+
+.portfolio-filter:hover,
+.blog-filters button:hover {
+  border-color: var(--border-strong);
+  color: var(--text-strong);
+}
+
+.portfolio-filter.is-active,
+.blog-filters button.is-active,
+.blog-category-badge,
+.service-badge-solid {
+  border-color: var(--accent-border);
+  background: var(--accent-soft);
+  color: var(--accent-text);
+}
+
+.portfolio-search,
+.blog-search {
+  min-height: 48px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  box-shadow: none;
+}
+
+.portfolio-search:focus-within,
+.blog-search:focus-within {
+  border-color: var(--accent);
+  box-shadow: none;
+}
+
+/* The empty roles state reads as one left-aligned block. */
+.roles-empty {
+  display: grid;
+  justify-items: start;
+  gap: 10px;
+  max-width: 720px;
+  padding: clamp(28px, 3vw, 40px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  text-align: left;
+}
+
+.roles-empty > .icon {
+  display: none;
+}
+
+.roles-empty h3,
+.roles-empty p {
+  margin: 0;
+}
+
+.roles-empty .btn-gradient {
+  margin-top: 10px;
+}
+
+/* Service feature blocks and case-study media follow the card radius. */
+.service-feature-media,
+.service-feature-media img,
+.cs-next-image,
+.case-study-gallery-frame,
+.gallery-thumb {
+  border-radius: var(--radius-media);
+}
+
+.service-feature-media {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--surface-3);
+}
+
+/* Blog featured card sits on the alternate tone, not a shadowed slab. */
+.blog-featured-card {
+  gap: clamp(24px, 3vw, 48px);
+  padding: clamp(24px, 3vw, 40px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--surface-2);
+  box-shadow: none;
+}
+
+/* Results tiles on a case study. */
+.cs-results li {
+  border-left: 2px solid var(--accent);
+  border-radius: 0 var(--radius-card) var(--radius-card) 0;
+  background: var(--accent-soft);
+}
+
+.cs-results strong {
+  color: var(--accent-text);
+}
+
+/* Nothing on the site uses the old floating CTA slab any more. */
+.cta-banner,
+.cta-banner-inner {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   10. Portfolio pull-quote
+   The card is a flat surface in both themes, so every piece of text inside it
+   has to come from the tokens — the legacy rules painted it for a dark card
+   and left white-on-white once the card went flat.
+   -------------------------------------------------------------------------- */
+
+.portfolio-testimonial-card {
+  padding: clamp(28px, 4vw, 52px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--surface-2);
+  color: var(--text-body);
+  box-shadow: none;
+}
+
+.portfolio-testimonial-card blockquote {
+  max-width: 34ch;
+  margin: 18px 0 28px;
+  color: var(--text-strong);
+  font-size: clamp(1.35rem, 2.6vw, 2.125rem);
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+
+.portfolio-testimonial-card figcaption,
+.portfolio-testimonial-card .testimonial-client-info strong {
+  color: var(--text-strong);
+}
+
+.portfolio-testimonial-card .testimonial-client-info strong {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.portfolio-testimonial-card figcaption span,
+.portfolio-testimonial-card .testimonial-client-info span {
+  color: var(--text-muted);
+  font-size: var(--fs-meta);
+}
+
+.portfolio-testimonial-card .testimonial-quote-icon {
+  color: var(--accent-text);
+}
+
+/* The initials chip was drawn for a dark card. */
+.portfolio-testimonial-card .initials-mark,
+.portfolio-testimonial-card .is-on-dark {
+  border: 1px solid var(--border);
+  background: var(--surface-3);
+  color: var(--text-strong);
+}
+
+.portfolio-testimonial-card .testimonial-company-logo {
+  border-color: var(--border);
+  background: var(--surface-3);
+  color: var(--text-muted);
+}
+
+.testimonial-avatar {
+  border: 2px solid var(--border);
+}
+
+/* --------------------------------------------------------------------------
+   11. Scope estimator (Contact)
+   -------------------------------------------------------------------------- */
+
+.estimator-head {
+  margin-bottom: var(--head-gap);
+}
+
+.estimator-head h2 {
+  max-width: 18ch;
+  margin: 0 0 14px;
+  font-size: var(--fs-h2);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+}
+
+.estimator {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 360px);
+  align-items: start;
+  gap: clamp(28px, 4vw, 56px);
+}
+
+.estimator-controls {
+  display: grid;
+  gap: clamp(28px, 3vw, 40px);
+}
+
+.estimator-field {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.estimator-field legend {
+  padding: 0;
+  color: var(--text-strong);
+  font-family: "Space Grotesk", "DM Sans", sans-serif;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.estimator-hint {
+  margin: 4px 0 0;
+  color: var(--text-muted);
+  font-size: var(--fs-meta);
+}
+
+.estimator-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+/* The real input stays focusable but invisible; the label is the control. */
+.estimator-chip input,
+.estimator-option input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.estimator-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  color: var(--text-body);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    background-color 160ms ease,
+    color 160ms ease;
+}
+
+.estimator-chip:hover {
+  border-color: var(--accent);
+  color: var(--accent-text);
+}
+
+.estimator-chip.is-on {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #fff;
+}
+
+.estimator-options {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.estimator-option {
+  display: block;
+  padding: 16px 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    background-color 160ms ease;
+}
+
+.estimator-option:hover {
+  border-color: var(--border-strong);
+}
+
+.estimator-option.is-on {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.estimator-option-copy {
+  display: grid;
+  gap: 4px;
+}
+
+.estimator-option-copy strong {
+  color: var(--text-strong);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.estimator-option-copy > span {
+  color: var(--text-muted);
+  font-size: var(--fs-meta);
+  line-height: 1.5;
+}
+
+/* Keyboard focus has to show on the label, since the input is hidden. */
+.estimator-chip:has(input:focus-visible),
+.estimator-option:has(input:focus-visible) {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Result panel */
+.estimator-result {
+  position: sticky;
+  top: calc(var(--header-h) + 20px);
+  display: grid;
+  justify-items: start;
+  gap: 4px;
+  padding: clamp(24px, 2.6vw, 32px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--surface-2);
+}
+
+.estimator-result-label {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--fs-eyebrow);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.estimator-range {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 6px 0 0;
+}
+
+.estimator-range strong {
+  color: var(--text-strong);
+  font-family: "Space Grotesk", "DM Sans", sans-serif;
+  font-size: clamp(2.5rem, 4vw, 3.25rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.estimator-range span {
+  color: var(--text-muted);
+  font-size: 1rem;
+}
+
+.estimator-note {
+  max-width: 34ch;
+  margin: 12px 0 0;
+  color: var(--text-muted);
+  font-size: var(--fs-meta);
+  line-height: 1.55;
+}
+
+.estimator-stages {
+  display: grid;
+  gap: 8px;
+  width: 100%;
+  margin: 22px 0 6px;
+  padding: 18px 0 0;
+  border-top: 1px solid var(--border);
+  list-style: none;
+  color: var(--text-body);
+  font-size: 0.9375rem;
+}
+
+.estimator-stages li {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  font-size: 0.9375rem;
+}
+
+.estimator-stage-num {
+  color: var(--text-muted);
+  font-family: "Space Grotesk", "DM Sans", sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.estimator-result .btn-gradient {
+  margin-top: 14px;
+}
+
+@media (max-width: 900px) {
+  .estimator {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .estimator-result {
+    position: static;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   12. Industry cards are links now
+   -------------------------------------------------------------------------- */
+
+a.industry-card {
+  text-decoration: none;
+  transition: border-color 160ms ease;
+}
+
+a.industry-card:hover {
+  border-color: var(--border-strong);
+}
+
+.industry-card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 20px 22px;
+  color: var(--accent-text);
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.industry-card-link .icon {
+  transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+a.industry-card:hover .industry-card-link .icon {
+  transform: translateX(4px);
+}
+
+a.industry-card:hover .industry-card-photo {
+  transform: none;
+}
+
+.industry-card p {
+  margin-bottom: 14px;
+}

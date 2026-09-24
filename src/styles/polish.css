@@ -1283,35 +1283,5 @@
   min-height: 100vh;
 }
 
-/* Scroll reveals (components/Reveal.jsx) ----------------------------------
-   Fade + 12px rise, transform/opacity only, 350ms, once. Double-class
-   selectors so the pending state wins over component transitions; the
-   classes are removed after the reveal so hover transitions are untouched. */
-.reveal.is-pending {
-  opacity: 0;
-}
+/* Scroll reveals were removed: every block renders at full opacity. */
 
-.reveal-up.is-pending {
-  transform: translate3d(0, 12px, 0);
-}
-
-.reveal-scale.is-pending {
-  transform: scale(0.98);
-}
-
-.reveal.is-revealing {
-  opacity: 1;
-  transform: none;
-  transition:
-    opacity 350ms cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0s),
-    transform 350ms cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0s);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .reveal.is-pending,
-  .reveal.is-revealing {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-}

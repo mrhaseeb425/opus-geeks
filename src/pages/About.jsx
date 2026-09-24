@@ -1,13 +1,11 @@
 import NumberedRows from "../components/NumberedRows";
 import PageHeader from "../components/PageHeader";
 import Photo from "../components/Photo";
-import Reveal from "../components/Reveal";
 import SectionHead from "../components/SectionHead";
 import StatsRow from "../components/StatsRow";
 import { PHOTOS } from "../data/photos";
 import { STATS, TEAM_SIZE_LABEL } from "../data/stats";
 import { SIZES } from "../lib/images";
-import { staggerDelay } from "../lib/stagger";
 
 // Rows carry a number rather than an icon badge, so these entries are copy
 // only now.
@@ -40,7 +38,7 @@ const TEAM = [
     detail: "Scoping and roadmaps that turn an idea into a plan we can build.",
   },
   {
-    role: "UX/UI Design",
+    role: "UI/UX Design",
     detail: "Research, prototypes and design systems your users find easy.",
   },
   {
@@ -81,7 +79,7 @@ export default function About() {
 
       <section className="section about-section about-story-section">
         <div className="frame about-story-grid">
-          <Reveal as="div" variant="fade">
+          <div>
             <p className="ed-eyebrow">Our story</p>
             <h2 className="section-title">Two offices, one product team</h2>
             <p className="about-copy">
@@ -95,11 +93,11 @@ export default function About() {
               estate, where reliability, compliance and user trust decide
               whether a product succeeds.
             </p>
-          </Reveal>
+          </div>
 
-          <Reveal as="div" className="about-stats-grid">
+          <div className="about-stats-grid">
             <StatsRow stats={STATS} compact />
-          </Reveal>
+          </div>
         </div>
       </section>
 
@@ -109,11 +107,9 @@ export default function About() {
       >
         <div className="frame photo-gallery about-gallery">
           {WORKSPACE_PHOTOS.map((photo, index) => (
-            <Reveal
-              as="figure"
+            <figure
               className={`photo-tile ${index === 0 ? "is-wide" : ""}`}
               key={photo.id}
-              delay={staggerDelay(index)}
             >
               <Photo
                 photo={photo}
@@ -126,7 +122,7 @@ export default function About() {
                     : SIZES.quarterCard
                 }
               />
-            </Reveal>
+            </figure>
           ))}
         </div>
       </section>

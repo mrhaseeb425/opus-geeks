@@ -11,21 +11,14 @@ const cvHref = `mailto:${careersEmail}?subject=${encodeURIComponent(
 )}`;
 
 const DEFAULT_CTA = {
-  title: "Have a project in mind?",
-  text: "Tell us what you're building and we'll reply with next steps within one business day.",
-  label: "Get a project estimate",
+  title: "Have a project in mind? Let's talk.",
+  text: "Tell us what you're building. We'll reply within one business day with clear next steps.",
+  label: "Book a free 30-min call",
   href: "/contact",
   nav: "Contact Us",
 };
 
 const PAGE_CTA = {
-  Home: {
-    title: "Have a project in mind?",
-    text: "Share a few details and get a reply with next steps within one business day.",
-    label: "Get a project estimate",
-    href: "/contact",
-    nav: "Contact Us",
-  },
   Services: {
     title: "Not sure which service you need?",
     text: "Describe your idea and we'll recommend the right mix of design and engineering. No commitment.",

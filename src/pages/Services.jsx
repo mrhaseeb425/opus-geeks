@@ -1,7 +1,6 @@
 import Icon from "../components/Icon";
 import NumberedRows from "../components/NumberedRows";
 import PageHeader from "../components/PageHeader";
-import Reveal from "../components/Reveal";
 import { SERVICES } from "../data/site";
 import Photo from "../components/Photo";
 import { SIZES } from "../lib/images";
@@ -75,15 +74,15 @@ export default function Services({ setActiveNav }) {
               className={`service-detail service-feature ${index % 2 === 1 ? "reverse" : ""}`}
               aria-labelledby={`${service.slug}-title`}
             >
-              <Reveal as="div" variant="fade" className="service-feature-media">
+              <div className="service-feature-media">
                 <Photo
                   photo={service.detailPhoto}
                   width={600}
                   ratio={3 / 2}
                   sizes={SIZES.serviceFeature}
                 />
-              </Reveal>
-              <Reveal as="div" className="service-feature-copy">
+              </div>
+              <div className="service-feature-copy">
                 <span className="service-badge service-badge-solid">
                   {service.tag}
                 </span>
@@ -114,7 +113,7 @@ export default function Services({ setActiveNav }) {
                     See case studies
                   </a>
                 </div>
-              </Reveal>
+              </div>
             </article>
           ))}
         </div>

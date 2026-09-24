@@ -1,7 +1,5 @@
 import Icon from "./Icon";
-import Reveal from "./Reveal";
 import { rowNumber } from "../lib/rows";
-import { staggerDelay } from "../lib/stagger";
 
 // Numbered editorial rows — the pattern that replaces boxed card grids:
 // number (01, 02…) on the left, title + one-line description in the middle,
@@ -21,15 +19,12 @@ export function NumberedRow({
   thumb,
   meta,
   aside,
-  delay,
 }) {
   const Inner = href ? "a" : "div";
 
   return (
-    <Reveal
-      as="li"
+    <li
       className={`ed-row ${thumb ? "has-thumb" : ""} ${aside ? "has-aside" : ""}`}
-      delay={delay ?? staggerDelay(index, 0.05)}
     >
       <Inner
         className="ed-row-inner"
@@ -53,7 +48,7 @@ export function NumberedRow({
           </span>
         )}
       </Inner>
-    </Reveal>
+    </li>
   );
 }
 

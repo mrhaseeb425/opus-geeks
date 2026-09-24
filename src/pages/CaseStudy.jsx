@@ -1,9 +1,7 @@
 import { Gallery, TechBadge } from "../components/CaseStudyContent";
 import Icon from "../components/Icon";
-import Reveal from "../components/Reveal";
 import { PROJECTS, splitResult } from "../data/projects";
 import Photo from "../components/Photo";
-import { staggerDelay } from "../lib/stagger";
 
 // Full, shareable case study page at /portfolio/:slug, structured as
 // Challenge → Solution → Results → Tech stack → Screenshots → Next project.
@@ -41,25 +39,16 @@ export default function CaseStudy({ project }) {
         </figure>
 
         <div className="cs-story">
-          <Reveal
-            as="section"
-            className="cs-block"
-            aria-labelledby="cs-challenge"
-          >
+          <section className="cs-block" aria-labelledby="cs-challenge">
             <span className="cs-step">01</span>
             <h2 id="cs-challenge">The challenge</h2>
             <p>{project.challenge}</p>
-          </Reveal>
-          <Reveal
-            as="section"
-            className="cs-block"
-            aria-labelledby="cs-solution"
-            delay={0.05}
-          >
+          </section>
+          <section className="cs-block" aria-labelledby="cs-solution">
             <span className="cs-step">02</span>
             <h2 id="cs-solution">Our solution</h2>
             <p>{project.solution}</p>
-          </Reveal>
+          </section>
         </div>
 
         <section className="cs-results" aria-labelledby="cs-results-title">
@@ -67,24 +56,16 @@ export default function CaseStudy({ project }) {
             <span className="cs-step">03</span> Results
           </h2>
           <ul>
-            {results.map((result, resultIndex) => (
-              <Reveal
-                as="li"
-                key={result.label}
-                delay={staggerDelay(resultIndex)}
-              >
+            {results.map((result) => (
+              <li key={result.label}>
                 {result.value && <strong>{result.value}</strong>}
                 <span>{result.label}</span>
-              </Reveal>
+              </li>
             ))}
           </ul>
         </section>
 
-        <Reveal
-          as="section"
-          className="cs-block cs-stack"
-          aria-labelledby="cs-stack"
-        >
+        <section className="cs-block cs-stack" aria-labelledby="cs-stack">
           <span className="cs-step">04</span>
           <h2 id="cs-stack">Tech stack</h2>
           <p>{project.architecture}</p>
@@ -93,7 +74,7 @@ export default function CaseStudy({ project }) {
               <TechBadge tech={tech} key={tech} />
             ))}
           </div>
-        </Reveal>
+        </section>
 
         <section className="cs-gallery" aria-labelledby="cs-gallery-title">
           <h2 id="cs-gallery-title">

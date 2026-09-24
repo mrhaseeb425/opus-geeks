@@ -1,4 +1,3 @@
-import Reveal from "./Reveal";
 
 // Editorial page header for every inner page: eyebrow with a short rule, big
 // left-aligned H1, and the description bottom-aligned on the right. No dark
@@ -14,7 +13,7 @@ export default function PageHeader({
 }) {
   return (
     <section className={`ed-page-head ${className}`}>
-      <Reveal as="div" className="frame ed-page-head-inner" disabled>
+      <div className="frame ed-page-head-inner">
         <div>
           {eyebrow && <p className="ed-eyebrow">{eyebrow}</p>}
           <h1 id={titleId}>{title}</h1>
@@ -23,7 +22,7 @@ export default function PageHeader({
           {subtitle && <p className="page-header-subtitle">{subtitle}</p>}
           {children}
         </div>
-      </Reveal>
+      </div>
     </section>
   );
 }

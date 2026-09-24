@@ -1,11 +1,11 @@
-// FAQ content for the /faqs page and the Home FAQ preview (items flagged
-// `preview` show on Home, in this order).
+// FAQ content for the /faqs page and the Home FAQ preview (the five items
+// flagged `preview` show on Home, in this order).
 
 export const FAQ_ITEMS = [
   {
     question: "What does Opus Geeks build?",
     answer:
-      "Mobile apps, web platforms, UX/UI design and games. We can take a product from scope and prototype through engineering, launch and support, or step in for one stage.",
+      "Mobile apps, web platforms, UI/UX design and games. We can take a product from scope and prototype through engineering, launch and support, or step in for one stage.",
     preview: true,
   },
   {
@@ -18,11 +18,12 @@ export const FAQ_ITEMS = [
     question: "Do you work with startups or established companies?",
     answer:
       "Both. We help early-stage founders ship a first product and help larger teams modernize existing platforms, mostly in fintech, healthcare, retail and real estate.",
+    preview: true,
   },
   {
     question: "What does your process look like?",
     answer:
-      "Four stages: Branding, Prototype, Development and Launch. You review each stage before the next one starts, so feedback lands before we build, not after.",
+      "Four stages: Discover, Design, Build, and Launch and support. You review each stage before the next one starts, so feedback lands before we build, not after.",
     preview: true,
   },
   {

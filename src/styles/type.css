@@ -795,24 +795,7 @@ h4 {
   margin: 0;
 }
 
-/* Route change: 150ms fade-in of the new page. `backwards` fill only applies
-   before/while running, so once finished the page has no animation, opacity
-   or stacking context left on it (drawers stay above the header). */
-@keyframes pageEnter {
-  from {
-    opacity: 0.4;
-  }
-}
 
-.page-enter {
-  animation: pageEnter 150ms ease-out backwards;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .page-enter {
-    animation: none;
-  }
-}
 
 /* Portfolio grid: 1 column on phones, 2 on tablets, 3 from 1200px, with
    compact 16:10 images. */
@@ -861,16 +844,6 @@ h4 {
 .faq-answer-clip {
   min-height: 0;
   overflow: hidden;
-}
-
-.faq-answer-clip .faq-answer {
-  opacity: 0;
-  transition: opacity 200ms ease;
-}
-
-.faq-item.is-open .faq-answer-clip .faq-answer {
-  opacity: 1;
-  transition-delay: 60ms;
 }
 
 .faq-chevron {

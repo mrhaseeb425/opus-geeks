@@ -24,9 +24,9 @@ export const PAGE_META = {
   },
   Services: {
     path: "/services",
-    title: `Services: Apps, Web, UX/UI and Games | ${SITE_NAME}`,
+    title: `Services: Apps, Web, UI/UX and Games | ${SITE_NAME}`,
     description:
-      "App development, web development, UX/UI design and game development, planned and built by one team.",
+      "App development, web development, UI/UX design and game development, planned and built by one team.",
   },
   Portfolio: {
     path: "/portfolio",

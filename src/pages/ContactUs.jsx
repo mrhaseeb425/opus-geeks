@@ -1,7 +1,7 @@
 import { useEffect, useId, useRef, useState } from "react";
 import Icon from "../components/Icon";
 import PageHeader from "../components/PageHeader";
-import Reveal from "../components/Reveal";
+import ScopeEstimator from "../components/ScopeEstimator";
 import { CONTACT, SERVICES, SOCIALS } from "../data/site";
 
 const INITIAL_FORM = { name: "", email: "", service: "", message: "" };
@@ -130,6 +130,19 @@ export default function ContactUs() {
 
   const errorId = (field) => (errors[field] ? `${field}-error` : undefined);
 
+  // The estimator writes its summary into the form, then puts the cursor at
+  // the end of the message so you carry straight on typing.
+  const applyEstimate = ({ service, message }) => {
+    setForm((prev) => ({ ...prev, service, message }));
+    setErrors((prev) => ({ ...prev, service: undefined, message: undefined }));
+    const field = formRef.current?.querySelector("#message");
+    if (field) {
+      field.focus();
+      field.setSelectionRange(message.length, message.length);
+      field.scrollIntoView({ block: "center", behavior: "smooth" });
+    }
+  };
+
   return (
     <div className="page-hero contact-page">
       <PageHeader
@@ -138,10 +151,29 @@ export default function ContactUs() {
         subtitle="Share a few details and we&rsquo;ll reply within one business day with questions and next steps."
       />
 
+      {/* Scope builder: shape the project, get an indicative timeline, and
+          drop the summary straight into the form below. */}
+      <section
+        className="section section-tight estimator-section"
+        aria-labelledby="estimator-title"
+      >
+        <div className="frame">
+          <div className="estimator-head">
+            <p className="ed-eyebrow">Plan your project</p>
+            <h2 id="estimator-title">Shape the brief in 30 seconds</h2>
+            <p className="section-subtitle">
+              Tell us roughly what you need and see how long work like it
+              usually takes. No email required.
+            </p>
+          </div>
+          <ScopeEstimator onApply={applyEstimate} />
+        </div>
+      </section>
+
       <section className="section section-tight">
         <div className="frame ed-contact">
           {/* Details, offices and what happens after you send. */}
-          <Reveal as="div" className="ed-contact-details">
+          <div className="ed-contact-details">
             <div className="ed-contact-block">
               <h2>Contact details</h2>
               <ul className="ed-contact-list">
@@ -232,7 +264,7 @@ export default function ContactUs() {
                 ))}
               </div>
             </div>
-          </Reveal>
+          </div>
 
           {/* Minimal underline form. Labels stay visible at all times. */}
           {/* A plain <form>: it holds the ref used to focus the first

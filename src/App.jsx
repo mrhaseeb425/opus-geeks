@@ -10,7 +10,6 @@ import Footer from "./components/Footer";
 import MobileCallBar from "./components/MobileCallBar";
 import RouteScroll from "./components/RouteScroll";
 import Navbar from "./components/Navbar";
-import Preloader from "./components/Preloader";
 import { footerCta } from "./data/cta";
 import { PAGE_META, postMeta, projectMeta, serviceMeta } from "./data/meta";
 import { findPost } from "./data/posts";
@@ -175,7 +174,6 @@ export default function App() {
         <a className="skip-link" href="#main-content">
           Skip to content
         </a>
-        <Preloader />
         <Navbar
           activeNav={activeNav}
           setActiveNav={setActiveNav}
@@ -191,11 +189,7 @@ export default function App() {
               sectionId={route.service?.slug}
               disabled={Boolean(route.modalOf)}
             />
-            {/* 150ms CSS fade (type.css .page-enter). A CSS animation always
-                runs to the end, so a page can never be left half-faded. */}
-            <div key={pageKey} className="page-enter">
-              {renderPage()}
-            </div>
+            <div key={pageKey}>{renderPage()}</div>
           </main>
           <Footer
             activeNav={activeNav}
