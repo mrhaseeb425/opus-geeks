@@ -1451,3 +1451,20 @@ body {
   object-fit: cover;
   object-position: left top;
 }
+
+/* Once the WebGL scene is up it replaces the flat dashboard entirely. The
+   canvas is transparent, so without this the fallback shows through it and
+   you see two dashboards at once. */
+.hero-scene-fallback {
+  transition: opacity 400ms ease;
+}
+
+.hero-scene.is-ready .hero-scene-fallback {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-scene-fallback {
+    transition: none;
+  }
+}
