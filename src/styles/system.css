@@ -1225,3 +1225,79 @@ a.industry-card:hover .industry-card-photo {
 .industry-card p {
   margin-bottom: 14px;
 }
+
+/* --------------------------------------------------------------------------
+   13. Case study results — the impact band
+   The most persuasive content on the site is the real outcome figure on each
+   case study, so it gets the largest numerals anywhere: no tiles, no fill,
+   just big numbers separated by hairlines.
+   -------------------------------------------------------------------------- */
+
+.cs-results {
+  margin-top: clamp(48px, 6vw, 80px);
+  padding: clamp(36px, 4.5vw, 64px) 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.cs-results h2 {
+  margin: 0 0 clamp(28px, 3.5vw, 44px);
+}
+
+.cs-results ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: clamp(24px, 3vw, 32px) 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cs-results li {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding: 2px clamp(20px, 2.6vw, 36px);
+  border: 0;
+  border-left: 1px solid var(--border);
+  border-radius: 0;
+  background: none;
+}
+
+.cs-results li:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+
+.cs-results strong {
+  color: var(--text-strong);
+  font-family: "Space Grotesk", "DM Sans", sans-serif;
+  font-size: clamp(2.75rem, 6vw, 4.5rem);
+  font-weight: 600;
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+  font-variant-numeric: tabular-nums;
+}
+
+.cs-results li span {
+  max-width: 24ch;
+  color: var(--text-muted);
+  font-size: var(--fs-card);
+  line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+  .cs-results ul {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cs-results li {
+    padding: 0;
+    border-left: 0;
+  }
+
+  .cs-results li + li {
+    padding-top: clamp(20px, 5vw, 28px);
+    border-top: 1px solid var(--border);
+  }
+}
