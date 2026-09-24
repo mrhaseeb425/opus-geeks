@@ -1,173 +1,173 @@
-import CountUp from "../components/CountUp";
-import Icon from "../components/Icon";
-import Magnetic from "../components/Magnetic";
+import NumberedRows from "../components/NumberedRows";
+import PageHeader from "../components/PageHeader";
+import Photo from "../components/Photo";
 import Reveal from "../components/Reveal";
-import { STATS, TAGLINE } from "../data/site";
+import SectionHead from "../components/SectionHead";
+import StatsRow from "../components/StatsRow";
+import { PHOTOS } from "../data/photos";
+import { STATS, TEAM_SIZE_LABEL } from "../data/stats";
+import { SIZES } from "../lib/images";
 import { staggerDelay } from "../lib/stagger";
 
+// Rows carry a number rather than an icon badge, so these entries are copy
+// only now.
 const VALUES = [
   {
-    icon: "shield",
     title: "Reliability first",
     detail:
-      "We build for industries where things breaking isn't an option — fintech, healthcare, and beyond.",
+      "We build for fintech and healthcare, where downtime and data errors aren't acceptable.",
   },
   {
-    icon: "users",
-    title: "Real partnership",
+    title: "Clear communication",
     detail:
-      "We work as an extension of your team, communicating early and often instead of disappearing between milestones.",
+      "You hear from us early and often, not only when a milestone is due.",
   },
   {
-    icon: "clock",
-    title: "Momentum",
+    title: "A defined process",
     detail:
-      "A clear four-stage process keeps every engagement moving from first call to launch day.",
+      "Four stages with sign-off at each one, so you always know what happens next.",
   },
   {
-    icon: "award",
-    title: "Craft",
+    title: "Attention to detail",
     detail:
-      "Design and engineering held to the same bar — we sweat the details other teams skip.",
+      "Design and engineering are held to the same bar, down to spacing and error states.",
   },
 ];
 
 const TEAM = [
-  { role: "Product Strategy", icon: "layers" },
-  { role: "UX/UI Design", icon: "pen" },
-  { role: "App Engineering", icon: "code" },
-  { role: "Web Engineering", icon: "browser" },
-  { role: "Game Development", icon: "gamepad" },
-  { role: "Quality & Delivery", icon: "check" },
+  {
+    role: "Product Strategy",
+    detail: "Scoping and roadmaps that turn an idea into a plan we can build.",
+  },
+  {
+    role: "UX/UI Design",
+    detail: "Research, prototypes and design systems your users find easy.",
+  },
+  {
+    role: "App Engineering",
+    detail: "Native and cross-platform mobile apps, plus the APIs behind them.",
+  },
+  {
+    role: "Web Engineering",
+    detail: "Web apps, dashboards and platforms that stay fast as they grow.",
+  },
+  {
+    role: "Game Development",
+    detail: "2D and 3D mobile games and VR/AR experiences, concept to release.",
+  },
+  {
+    role: "Quality & Delivery",
+    detail: "Testing, release management and post-launch support.",
+  },
 ];
 
-export default function About({ setActiveNav }) {
-  const goTo = (label) => (event) => {
-    event.preventDefault();
-    setActiveNav?.(label);
-  };
+// Generic workspace scenes with no people (credited in CREDITS.md). They are
+// never captioned or described as our office or team.
+// TODO(content): replace with real photos of the Karachi / Florida offices.
+const WORKSPACE_PHOTOS = [
+  PHOTOS.aboutDesk,
+  PHOTOS.aboutPlanning,
+  PHOTOS.aboutNotebook,
+];
 
+export default function About() {
   return (
     <div className="page-hero about-page">
-      <section className="page-header about-page-header">
-        <Reveal as="div" className="frame">
-          <p className="section-eyebrow">About Opus Geeks</p>
-          <h1>A dedicated team of designers, developers, and builders</h1>
-          <p className="page-header-subtitle">{TAGLINE}</p>
-        </Reveal>
-      </section>
+      <PageHeader
+        eyebrow="About Opus Geeks"
+        title="Designers and engineers who ship together"
+        subtitle={`We're a ${TEAM_SIZE_LABEL}-person studio building web platforms, mobile apps and games for startups and growing companies.`}
+      />
 
       <section className="section about-section about-story-section">
         <div className="frame about-story-grid">
           <Reveal as="div" variant="fade">
-            <p className="section-eyebrow">Our story</p>
-            <h2 className="section-title">
-              Helping teams navigate technology, from Karachi to Florida
-            </h2>
+            <p className="ed-eyebrow">Our story</p>
+            <h2 className="section-title">Two offices, one product team</h2>
             <p className="about-copy">
-              Opus Geeks started with a simple idea: startups and enterprises
-              alike deserve a technology partner that treats their product like
-              its own. With teams in Karachi, Pakistan and headquarters in
-              Pembroke Pines, Florida, we've grown into a full-cycle studio
-              covering strategy, design, and engineering.
+              Opus Geeks started with a simple belief: every client deserves a
+              partner that treats their product like its own. Today our
+              engineers and designers work from Karachi, Pakistan and our
+              headquarters in Pembroke Pines, Florida.
             </p>
             <p className="about-copy">
-              We work across fintech, healthcare, retail, and real estate —
-              industries where reliability, compliance, and user trust genuinely
-              matter — helping our clients stay ahead of the curve instead of
-              playing catch-up.
+              Most of our work is in fintech, healthcare, retail and real
+              estate, where reliability, compliance and user trust decide
+              whether a product succeeds.
             </p>
           </Reveal>
 
-          <div className="stats-grid about-stats-grid">
-            {STATS.map((stat, index) => (
-              <Reveal
-                as="div"
-                className="stat-card"
-                key={stat.label}
-                delay={staggerDelay(index)}
-              >
-                <Icon name={stat.icon} className="stat-icon" />
-                <span className="stat-value">
-                  <CountUp value={stat.value} />
-                </span>
-                <span className="stat-label">{stat.label}</span>
-              </Reveal>
-            ))}
-          </div>
+          <Reveal as="div" className="about-stats-grid">
+            <StatsRow stats={STATS} compact />
+          </Reveal>
+        </div>
+      </section>
+
+      <section
+        className="section-tight about-gallery-section"
+        aria-label="Workspace photos"
+      >
+        <div className="frame photo-gallery about-gallery">
+          {WORKSPACE_PHOTOS.map((photo, index) => (
+            <Reveal
+              as="figure"
+              className={`photo-tile ${index === 0 ? "is-wide" : ""}`}
+              key={photo.id}
+              delay={staggerDelay(index)}
+            >
+              <Photo
+                photo={photo}
+                priority={index === 0}
+                width={index === 0 ? 760 : 400}
+                ratio={index === 0 ? 16 / 10 : 4 / 5}
+                sizes={
+                  index === 0
+                    ? "(max-width: 860px) calc(100vw - 36px), 760px"
+                    : SIZES.quarterCard
+                }
+              />
+            </Reveal>
+          ))}
         </div>
       </section>
 
       <section className="section section-alt about-section about-values-section">
         <div className="frame">
-          <Reveal as="div" className="section-head">
-            <p className="section-eyebrow">What we value</p>
-            <h2 className="section-title">The principles behind every build</h2>
-          </Reveal>
-          <div className="grid-4 values-grid">
-            {VALUES.map((value, index) => (
-              <Reveal
-                as="div"
-                className="card-glass value-card"
-                key={value.title}
-                delay={staggerDelay(index)}
-              >
-                <span className="card-icon-badge">
-                  <Icon name={value.icon} />
-                </span>
-                <h3>{value.title}</h3>
-                <p>{value.detail}</p>
-              </Reveal>
-            ))}
-          </div>
+          <SectionHead
+            eyebrow="What we value"
+            title="What you can expect from us"
+            subtitle="Four commitments we hold ourselves to on every project, large or small."
+          />
+          <NumberedRows
+            ariaLabel="What we value"
+            items={VALUES.map((value) => ({
+              key: value.title,
+              title: value.title,
+              description: value.detail,
+            }))}
+          />
         </div>
       </section>
 
       <section className="section about-section about-team-section">
         <div className="frame">
-          <Reveal as="div" className="section-head">
-            <p className="section-eyebrow">Our team</p>
-            <h2 className="section-title">Disciplines under one roof</h2>
-            <p className="section-subtitle">
-              Every project draws on a cross-functional team so nothing gets
-              lost between design and engineering handoffs.
-            </p>
-          </Reveal>
-          <div className="grid-3 team-grid">
-            {TEAM.map((member, index) => (
-              <Reveal
-                as="div"
-                className="team-card"
-                key={member.role}
-                delay={staggerDelay(index)}
-              >
-                <span className="card-icon-badge">
-                  <Icon name={member.icon} />
-                </span>
-                <h3>{member.role}</h3>
-              </Reveal>
-            ))}
-          </div>
+          <SectionHead
+            eyebrow="Our team"
+            title="Six disciplines under one roof"
+            subtitle="Each project draws on the skills it needs, without handoffs between agencies."
+          />
+          <NumberedRows
+            ariaLabel="Disciplines"
+            items={TEAM.map((member) => ({
+              key: member.role,
+              title: member.role,
+              description: member.detail,
+            }))}
+          />
         </div>
       </section>
 
-      <section className="section cta-banner about-cta-section">
-        <Reveal as="div" className="frame cta-banner-inner">
-          <div>
-            <h2>Want to work with us?</h2>
-            <p>We'd love to hear about what you're building.</p>
-          </div>
-          <Magnetic>
-            <a
-              className="btn-gradient"
-              href="#contact"
-              onClick={goTo("Contact Us")}
-            >
-              Get in touch <Icon name="arrowRight" className="icon-sm" />
-            </a>
-          </Magnetic>
-        </Reveal>
-      </section>
+      {/* The closing CTA opens the footer now (data/cta.js). */}
     </div>
   );
 }

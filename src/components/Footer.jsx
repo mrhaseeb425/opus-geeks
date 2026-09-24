@@ -1,13 +1,7 @@
 import Icon from "./Icon";
-import {
-  NAV_ITEMS,
-  SERVICES,
-  CONTACT,
-  SOCIALS,
-  TAGLINE,
-} from "../data/site";
+import { NAV_ITEMS, SERVICES, CONTACT, SOCIALS, TAGLINE } from "../data/site";
 
-export default function Footer({ setActiveNav }) {
+export default function Footer({ activeNav, setActiveNav, cta }) {
   const year = new Date().getFullYear();
 
   const goTo = (label) => (event) => {
@@ -17,13 +11,27 @@ export default function Footer({ setActiveNav }) {
 
   return (
     <footer className="site-footer">
+      {/* The page's closing call to action, merged into the top of the
+          footer — there is no separate floating CTA card any more. */}
+      {cta && (
+        <div className="frame footer-cta">
+          <div>
+            <h2>{cta.title}</h2>
+            <p>{cta.text}</p>
+          </div>
+          <a
+            className="btn-gradient"
+            href={cta.href}
+            onClick={cta.nav ? goTo(cta.nav) : undefined}
+          >
+            {cta.label} <Icon name="arrowRight" className="icon-sm" />
+          </a>
+        </div>
+      )}
+
       <div className="frame footer-grid">
         <div className="footer-brand">
-          <a
-            className="brand footer-logo"
-            href="#home"
-            onClick={goTo("Home")}
-          >
+          <a className="brand footer-logo" href="/" onClick={goTo("Home")}>
             <span className="brand-copy">
               <span className="brand-primary">OPUS</span>
               <span className="brand-secondary">GEEKS</span>
@@ -47,26 +55,33 @@ export default function Footer({ setActiveNav }) {
         </div>
 
         <nav className="footer-col" aria-label="Quick links">
-          <h3 className="footer-heading">Quick Links</h3>
+          <h2 className="footer-heading">Quick Links</h2>
           <ul className="footer-link-list">
-            {NAV_ITEMS.map((item) => (
-              <li key={item.label}>
-                <a href={`#${item.hash}`} onClick={goTo(item.label)}>
-                  {item.label}
-                </a>
-              </li>
-            ))}
+            {[...NAV_ITEMS, { label: "Careers", path: "/careers" }].map(
+              (item) => (
+                <li key={item.label}>
+                  <a
+                    href={item.path}
+                    onClick={goTo(item.label)}
+                    aria-current={activeNav === item.label ? "page" : undefined}
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ),
+            )}
           </ul>
         </nav>
 
         <nav className="footer-col" aria-label="Services">
-          <h3 className="footer-heading">Services</h3>
+          <h2 className="footer-heading">Services</h2>
           <ul className="footer-link-list">
             {SERVICES.map((service) => (
-              <li key={service.name}>
+              <li key={service.slug}>
                 <a
-                  href={`#${service.hash}`}
+                  href={`/services/${service.slug}`}
                   onClick={goTo(service.name)}
+                  aria-current={activeNav === service.name ? "page" : undefined}
                 >
                   {service.name}
                 </a>
@@ -76,7 +91,7 @@ export default function Footer({ setActiveNav }) {
         </nav>
 
         <div className="footer-col">
-          <h3 className="footer-heading">Get in Touch</h3>
+          <h2 className="footer-heading">Get in Touch</h2>
           <ul className="footer-contact-list">
             <li>
               <Icon name="mail" />

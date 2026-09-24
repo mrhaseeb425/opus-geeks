@@ -1,4 +1,24 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap");
+/* Self-hosted variable fonts (SIL Open Font License), Latin subset, loaded from
+   this stylesheet (no <link rel=preload>: Chrome warns "preloaded but not
+   used" on cached repeat loads). Replaces a render-blocking Google Fonts @import chain. The
+   weight ranges match what the Google request served (400–700 / 500–700), so
+   rendering is unchanged. */
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("/fonts/dm-sans-latin-var.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-weight: 500 700;
+  font-display: swap;
+  src: url("/fonts/space-grotesk-latin-var.woff2") format("woff2");
+}
+
 @import "tailwindcss";
 
 :root {
@@ -9,50 +29,6 @@
   --text-h: #111827;
   --social-bg: #f2f5f8;
   --shadow: 0 18px 50px rgba(17, 24, 39, 0.08);
-}
-
-/* Cursor.jsx — the native pointer stays visible site-wide (matching
-   lusion.co); only elements marked data-cursor-label hide it in favor of
-   the filled label circle drawn below. */
-[data-cursor-label]:hover {
-  cursor: none;
-}
-
-.cursor-ring {
-  position: fixed;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  z-index: 9999;
-  width: 84px;
-  height: 84px;
-  margin: -42px;
-  border-radius: 999px;
-  background: var(--text-h);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  will-change: transform;
-}
-
-.cursor-ring-label {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #fff;
-}
-
-@media (pointer: coarse) {
-  .cursor-ring {
-    display: none;
-  }
-}
-
-/* Magnetic.jsx wrapper — inline-block so transforms don't affect layout. */
-.magnetic {
-  display: inline-block;
-  will-change: transform;
 }
 
 /* Preloader.jsx — one-time loading screen on first mount. */
@@ -97,58 +73,4 @@
   font-size: 0.85rem;
   letter-spacing: 0.08em;
   opacity: 0.7;
-}
-
-/* PageCurtain.jsx — full-screen wipe played between page navigations. */
-.page-curtain {
-  position: fixed;
-  inset: 0;
-  z-index: 9998;
-  background: var(--accent);
-  pointer-events: none;
-}
-
-/* Per-line text reveal masks (HeroSlider.jsx) — clip the translateY so lines
-   slide up from below instead of just fading. */
-.reveal-mask {
-  overflow: hidden;
-}
-
-/* MouseTrail.jsx — fading ribbon painted behind pointer movement. */
-.mouse-trail-canvas {
-  position: fixed;
-  inset: 0;
-  z-index: 60;
-  pointer-events: none;
-}
-
-/* CardSpotlight.jsx — cursor-tracked glow revealed on card hover. */
-.industry-card,
-.team-card,
-.faq-item {
-  position: relative;
-}
-
-.card-glass::before,
-.industry-card::before,
-.team-card::before,
-.process-step::before,
-.faq-item::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  border-radius: inherit;
-  background: radial-gradient(
-    240px circle at var(--spot-x, 50%) var(--spot-y, 50%),
-    rgba(23, 105, 255, 0.16),
-    transparent 70%
-  );
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  pointer-events: none;
-}
-
-.is-spotlit::before {
-  opacity: 1;
 }

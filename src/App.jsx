@@ -1,141 +1,210 @@
-import { useCallback, useEffect, useState } from "react";
-import { AnimatePresence, motion, MotionConfig } from "framer-motion";
-import "./App.css";
-import CardSpotlight from "./components/CardSpotlight";
-import Cursor from "./components/Cursor";
+import {
+  Suspense,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
+import { MotionConfig } from "framer-motion";
+import BackToTop from "./components/BackToTop";
 import Footer from "./components/Footer";
-import MouseTrail from "./components/MouseTrail";
+import MobileCallBar from "./components/MobileCallBar";
+import RouteScroll from "./components/RouteScroll";
 import Navbar from "./components/Navbar";
-import PageCurtain from "./components/PageCurtain";
 import Preloader from "./components/Preloader";
-import { NAV_ITEMS, SERVICES } from "./data/site";
-import { initLenis, scrollToTop } from "./lib/smoothScroll";
-import About from "./pages/About";
-import Blogs from "./pages/Blogs";
-import ContactUs from "./pages/ContactUs";
-import FAQs from "./pages/FAQs";
+import { footerCta } from "./data/cta";
+import { PAGE_META, postMeta, projectMeta, serviceMeta } from "./data/meta";
+import { findPost } from "./data/posts";
+import { findProject } from "./data/projects";
+import { SERVICES } from "./data/site";
+import {
+  navigate,
+  parsePath,
+  pathForLabel,
+  upgradeLegacyHash,
+  useDocumentMeta,
+  useLinkInterception,
+  useLocation,
+} from "./lib/router";
+import { lazyPage, preloadWhenIdle } from "./lib/lazyPage";
+import { applyTheme, getInitialTheme } from "./lib/theme";
 import Home from "./pages/Home";
-import Portfolio from "./pages/Portfolio";
-import Services from "./pages/Services";
 
-// Map every URL hash slug (e.g. "app-development") to the nav label the app
-// renders for it, so a direct link like /#contact or /#web-development opens
-// the right page instead of always falling back to Home.
-const HASH_TO_LABEL = {
-  services: "Services",
-  ...Object.fromEntries(NAV_ITEMS.map((item) => [item.hash, item.label])),
-  ...Object.fromEntries(SERVICES.map((s) => [s.hash, s.name])),
-};
+// Home ships in the main bundle (most visits land there); every other route
+// is its own chunk, prefetched when the browser goes idle.
+const About = lazyPage(() => import("./pages/About"));
+const BlogPost = lazyPage(() => import("./pages/BlogPost"));
+const Careers = lazyPage(() => import("./pages/Careers"));
+const Blogs = lazyPage(() => import("./pages/Blogs"));
+const CaseStudy = lazyPage(() => import("./pages/CaseStudy"));
+const ContactUs = lazyPage(() => import("./pages/ContactUs"));
+const FAQs = lazyPage(() => import("./pages/FAQs"));
+const NotFound = lazyPage(() => import("./pages/NotFound"));
+const Portfolio = lazyPage(() => import("./pages/Portfolio"));
+const Services = lazyPage(() => import("./pages/Services"));
+const LAZY_PAGES = [
+  Services,
+  Portfolio,
+  Blogs,
+  About,
+  ContactUs,
+  FAQs,
+  CaseStudy,
+  BlogPost,
+  Careers,
+  NotFound,
+];
 
-const LABEL_TO_HASH = Object.fromEntries(
-  Object.entries(HASH_TO_LABEL).map(([hash, label]) => [label, hash]),
-);
+// Resolves the current URL into what to render. A drawer preview pushes the
+// detail URL with `modalOf` in history state, so the list page stays mounted
+// underneath while the address bar shows the shareable detail URL.
+function resolveRoute(pathname, state) {
+  const modalOf = state?.modalOf ?? null;
+  const base = parsePath(modalOf ?? pathname);
+  const previewSlug = modalOf ? parsePath(pathname).slug : null;
 
-function labelFromHash() {
-  if (typeof window === "undefined") return "Home";
-  const slug = window.location.hash.replace("#", "");
-  return HASH_TO_LABEL[slug] || "Home";
+  let detail = null;
+  if (!modalOf && base.slug) {
+    if (base.page === "Blogs") detail = findPost(base.slug);
+    if (base.page === "Portfolio") detail = findProject(base.slug);
+  }
+  const service =
+    base.page === "Services" && base.slug
+      ? SERVICES.find((s) => s.slug === base.slug)
+      : null;
+
+  let page = base.page;
+  if (
+    (page === "Blogs" || page === "Portfolio") &&
+    base.slug &&
+    !modalOf &&
+    !detail
+  ) {
+    page = "NotFound";
+  }
+  if (page === "Services" && base.slug && !service) page = "NotFound";
+
+  return { page, slug: base.slug, detail, service, previewSlug, modalOf };
+}
+
+function metaFor(route, pathname) {
+  const preview =
+    route.previewSlug &&
+    (route.page === "Blogs"
+      ? findPost(route.previewSlug)
+      : findProject(route.previewSlug));
+  const detail = route.detail ?? preview;
+  if (detail && route.page === "Blogs") return postMeta(detail);
+  if (detail && route.page === "Portfolio") return projectMeta(detail);
+  if (route.service) return serviceMeta(route.service);
+  return { ...PAGE_META[route.page], path: pathname };
 }
 
 export default function App() {
-  const [activeNav, setActiveNavState] = useState(labelFromHash);
-  const [displayedNav, setDisplayedNav] = useState(activeNav);
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const { pathname, state } = useLocation();
+  const route = resolveRoute(pathname, state);
+  const [theme, setTheme] = useState(getInitialTheme);
+  const isDarkMode = theme === "dark";
 
-  // Keep in sync with browser back/forward and any direct link navigation.
-  useEffect(() => {
-    const handleHashChange = () => setActiveNavState(labelFromHash());
-    window.addEventListener("hashchange", handleHashChange);
-    return () => window.removeEventListener("hashchange", handleHashChange);
-  }, []);
-
-  // Wrap the setter so programmatic navigation (nav clicks, in-page CTAs)
-  // also updates the URL hash, keeping links shareable and bookmarkable.
-  const setActiveNav = useCallback((label) => {
-    setActiveNavState(label);
-    const hash = LABEL_TO_HASH[label];
-    if (hash && typeof window !== "undefined") {
-      const url = `${window.location.pathname}${window.location.search}#${hash}`;
-      window.history.pushState(null, "", url);
-    }
-  }, []);
+  useLinkInterception();
+  useDocumentMeta(metaFor(route, pathname));
 
   useEffect(() => {
-    initLenis();
+    upgradeLegacyHash();
+    return preloadWhenIdle(LAZY_PAGES);
   }, []);
 
-  // The curtain (below) covers the screen, then flips displayedNav so the
-  // page swap happens while fully hidden, then reveals the new page — this
-  // is what keeps the wipe transition from ever showing a mid-navigation
-  // flash of the outgoing or incoming content.
-  const handleCovered = useCallback(() => {
-    setDisplayedNav(activeNav);
-    scrollToTop();
-  }, [activeNav]);
+  const toggleTheme = () => {
+    const next = isDarkMode ? "light" : "dark";
+    applyTheme(next);
+    setTheme(next);
+  };
 
-  const renderPage = (nav) => {
-    switch (nav) {
+  // Pages keep calling setActiveNav("Contact Us") etc.; it now maps the
+  // label to a real URL.
+  const setActiveNav = useCallback(
+    (label) => navigate(pathForLabel(label)),
+    [],
+  );
+
+  // Detail pages are separate screens; the Services page stays mounted while
+  // jumping between its sections.
+  const pageKey =
+    route.detail || route.page === "NotFound"
+      ? `${route.page}:${route.slug ?? pathname}`
+      : route.page;
+
+  const activeNav = route.service ? route.service.name : route.page;
+
+  const renderPage = () => {
+    switch (route.page) {
       case "Home":
         return <Home setActiveNav={setActiveNav} />;
       case "Services":
-      case "App Development":
-      case "Web Development":
-      case "UX/UI Design":
-      case "Game Development":
-        return <Services serviceName={nav} setActiveNav={setActiveNav} />;
+        return <Services setActiveNav={setActiveNav} />;
       case "Portfolio":
-        return <Portfolio setActiveNav={setActiveNav} />;
+        return route.detail ? (
+          <CaseStudy project={route.detail} setActiveNav={setActiveNav} />
+        ) : (
+          <Portfolio
+            previewSlug={route.previewSlug}
+            setActiveNav={setActiveNav}
+          />
+        );
       case "Blogs":
-        return <Blogs />;
+        return route.detail ? (
+          <BlogPost post={route.detail} />
+        ) : (
+          <Blogs previewSlug={route.previewSlug} />
+        );
       case "About":
         return <About setActiveNav={setActiveNav} />;
       case "Contact Us":
         return <ContactUs />;
       case "FAQs":
         return <FAQs setActiveNav={setActiveNav} />;
+      case "Careers":
+        return <Careers />;
       default:
-        return <Home setActiveNav={setActiveNav} />;
+        return <NotFound />;
     }
   };
-
-  const pageContent =
-    displayedNav === "Contact Us" ? (
-      <ContactUs
-        isDarkMode={isDarkMode}
-        onToggleDarkMode={() => setIsDarkMode((enabled) => !enabled)}
-      />
-    ) : (
-      renderPage(displayedNav)
-    );
 
   return (
     <MotionConfig reducedMotion="user">
       <div className={`app-shell ${isDarkMode ? "is-dark" : ""}`}>
+        <a className="skip-link" href="#main-content">
+          Skip to content
+        </a>
         <Preloader />
-        <PageCurtain trigger={activeNav} onCovered={handleCovered} />
-        <MouseTrail />
-        <CardSpotlight />
-        <Cursor />
         <Navbar
           activeNav={activeNav}
           setActiveNav={setActiveNav}
           isDarkMode={isDarkMode}
-          onToggleDarkMode={() => setIsDarkMode((enabled) => !enabled)}
+          onToggleDarkMode={toggleTheme}
         />
-        <main className="main-stage">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={displayedNav}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.25 }}
-            >
-              {pageContent}
-            </motion.div>
-          </AnimatePresence>
-        </main>
-        <Footer setActiveNav={setActiveNav} />
+        {/* The header never waits. Page and footer resolve together, so a
+            first visit to a lazy route never shifts the footer (CLS). */}
+        <Suspense fallback={<div className="route-fallback" />}>
+          <main className="main-stage" id="main-content" tabIndex={-1}>
+            <RouteScroll
+              pageKey={pageKey}
+              sectionId={route.service?.slug}
+              disabled={Boolean(route.modalOf)}
+            />
+            {/* 150ms CSS fade (type.css .page-enter). A CSS animation always
+                runs to the end, so a page can never be left half-faded. */}
+            <div key={pageKey} className="page-enter">
+              {renderPage()}
+            </div>
+          </main>
+          <Footer
+            activeNav={activeNav}
+            setActiveNav={setActiveNav}
+            cta={footerCta(route.page)}
+          />
+        </Suspense>
+        <BackToTop />
+        {route.page !== "Contact Us" && <MobileCallBar />}
       </div>
     </MotionConfig>
   );

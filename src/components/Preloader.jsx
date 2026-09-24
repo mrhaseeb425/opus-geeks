@@ -1,19 +1,39 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { markPreloaderDone } from "../lib/preloader";
 
 const EASE = [0.76, 0, 0.24, 1];
-const DURATION = 1400;
+const DURATION = 700;
+const SEEN_KEY = "og-intro-seen";
 
-// Shown once per full page load (not on internal nav) — a percentage
-// counter that fills then wipes away, the signature "loading" moment on
-// award-style studio sites before the real UI is revealed.
+// Branded intro counter, shown on the first page load of a browser session
+// only. It is a timed moment, not a real loading indicator, so repeating it
+// on every refresh or shared link just delayed content (and read as
+// "loading" on slower machines). Skipped entirely with reduced motion.
+function shouldSkipIntro() {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    return true;
+  }
+  try {
+    if (sessionStorage.getItem(SEEN_KEY)) return true;
+    sessionStorage.setItem(SEEN_KEY, "1");
+  } catch {
+    // Storage unavailable: fall through and show it.
+  }
+  return false;
+}
+
+// Decided once per page load (not per render, so StrictMode's double
+// initialisers in dev can't mark the intro as seen before it plays).
+const SKIP_INTRO = typeof window !== "undefined" && shouldSkipIntro();
+
 export default function Preloader() {
   const [progress, setProgress] = useState(0);
-  const [done, setDone] = useState(false);
+  const [done, setDone] = useState(SKIP_INTRO);
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setDone(true);
+    if (SKIP_INTRO) {
+      markPreloaderDone();
       return undefined;
     }
 
@@ -24,7 +44,11 @@ export default function Preloader() {
       if (pct < 100) {
         frame = requestAnimationFrame(tick);
       } else {
-        setTimeout(() => setDone(true), 300);
+        setTimeout(() => {
+          setDone(true);
+          // The panel starts lifting now; content can begin its entrance.
+          markPreloaderDone();
+        }, 120);
       }
     });
 
@@ -37,7 +61,7 @@ export default function Preloader() {
         <motion.div
           className="preloader"
           exit={{ y: "-100%" }}
-          transition={{ duration: 0.8, ease: EASE }}
+          transition={{ duration: 0.5, ease: EASE }}
           aria-hidden="true"
         >
           <span className="preloader-brand">OPUS GEEKS</span>

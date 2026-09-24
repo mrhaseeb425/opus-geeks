@@ -1,0 +1,610 @@
+/* ==========================================================================
+   Home hero — one static, two-column hero (copy left, product mockup right).
+   Colors come from the --hero-* tokens in theme.css. The only motion is a
+   single entrance on first load (< 600ms total); none with reduced motion.
+   ========================================================================== */
+
+.home-hero {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  /* Capped at ~85vh (header included) so the stats start close below. */
+  min-height: min(calc(85svh - var(--header-h)), 640px);
+  padding: clamp(32px, 4vw, 56px) 0 clamp(36px, 4vw, 56px);
+  color: var(--hero-text);
+  background:
+    radial-gradient(52% 60% at 78% 40%, var(--hero-glow), transparent 70%),
+    linear-gradient(180deg, var(--hero-bg-start) 0%, var(--hero-bg-end) 100%);
+  border-bottom: 1px solid var(--hero-edge);
+}
+
+.home-hero-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(32px, 5vw, 72px);
+}
+
+.home-hero-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.home-hero-eyebrow {
+  margin: 0 0 18px;
+  padding: 6px 14px;
+  border: 1px solid var(--hero-chip-border);
+  border-radius: 999px;
+  background: var(--hero-chip-bg);
+  color: var(--hero-accent-text);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.home-hero-title {
+  max-width: 17ch;
+  margin: 0;
+  color: var(--hero-text);
+  font-size: clamp(2.2rem, 4.2vw, 3.6rem);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+}
+
+.home-hero-title .hero-highlight {
+  background: linear-gradient(96deg, #60a5fa 0%, #818cf8 46%, #c084fc 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.home-hero-lede {
+  max-width: 37rem;
+  margin: 20px 0 0;
+  color: var(--hero-muted);
+  font-size: clamp(1rem, 1.2vw, 1.125rem);
+  line-height: 1.65;
+}
+
+.home-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.home-hero-trust {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 24px 0 0;
+  color: var(--hero-muted);
+  font-size: 0.9rem;
+}
+
+.home-hero-trust .icon {
+  color: var(--hero-accent-text);
+}
+
+/* Visual: laptop + overlapping phone ---------------------------------- */
+
+.home-hero-visual {
+  min-width: 0;
+}
+
+/* The composition fills the column; the phone overhangs the laptop's
+   bottom-right corner. Container queries (below) drop secondary content on
+   narrow widths so no text ever renders below 12px. */
+.hero-devices {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 100 / 80;
+  container-type: inline-size;
+}
+
+/* One soft glow behind the devices. */
+.hero-devices::before {
+  content: "";
+  position: absolute;
+  inset: 8% 4% 0 10%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, var(--hero-glow), transparent);
+}
+
+.hero-laptop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 86%;
+}
+
+.hero-laptop-lid {
+  padding: 2.2%;
+  padding-bottom: 3%;
+  border: 1px solid var(--device-edge);
+  border-bottom: 0;
+  border-radius: 16px 16px 4px 4px;
+  background: var(--device-frame);
+  box-shadow: 0 30px 70px rgba(2, 8, 22, 0.45);
+}
+
+.hero-laptop-screen {
+  display: grid;
+  grid-template-columns: 24% minmax(0, 1fr);
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 6px;
+  background: var(--device-screen);
+}
+
+.hero-laptop-base {
+  position: relative;
+  width: 112%;
+  height: clamp(8px, 1.6cqi, 14px);
+  margin-left: -6%;
+  border: 1px solid var(--device-edge);
+  border-radius: 2px 2px 14px 14px;
+  background: linear-gradient(180deg, var(--device-frame), var(--device-base));
+}
+
+.hero-laptop-base::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 16%;
+  height: 40%;
+  border-radius: 0 0 8px 8px;
+  background: var(--device-edge);
+  transform: translateX(-50%);
+}
+
+/* Dashboard screen */
+.dash-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 10px;
+  border-right: 1px solid var(--hero-card-border);
+  background: var(--device-panel);
+}
+
+.dash-brand {
+  display: grid;
+  width: 26px;
+  height: 26px;
+  margin-bottom: 10px;
+  place-items: center;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.8125rem;
+  font-weight: 800;
+}
+
+.dash-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 7px;
+  color: var(--hero-muted);
+  font-size: 0.75rem;
+}
+
+.dash-nav i {
+  flex: 0 0 auto;
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  background: currentColor;
+  opacity: 0.55;
+}
+
+.dash-nav b {
+  overflow: hidden;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dash-nav.is-active {
+  background: var(--hero-chip-bg);
+  color: var(--hero-accent-text);
+}
+
+.dash-main {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  padding: 14px 16px;
+}
+
+.dash-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.dash-header strong {
+  color: var(--hero-text);
+  font-size: 0.9375rem;
+}
+
+.dash-pill {
+  padding: 3px 9px;
+  border: 1px solid var(--hero-card-border);
+  border-radius: 999px;
+  color: var(--hero-muted);
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+.dash-kpis {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.dash-kpi,
+.dash-chart {
+  border: 1px solid var(--hero-card-border);
+  border-radius: 10px;
+  background: var(--hero-card-inset);
+}
+
+.dash-kpi {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  padding: 10px 12px;
+}
+
+.dash-kpi span,
+.dash-kpi em,
+.dash-chart > span {
+  overflow: hidden;
+  color: var(--hero-muted);
+  font-size: 0.75rem;
+  font-style: normal;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dash-kpi strong {
+  color: var(--hero-text);
+  font-size: clamp(1rem, 3.4cqi, 1.35rem);
+  letter-spacing: -0.02em;
+}
+
+.dash-kpi em {
+  color: var(--device-positive);
+  font-weight: 700;
+}
+
+.dash-chart {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 0;
+  padding: 10px 12px 8px;
+}
+
+.dash-chart svg {
+  display: block;
+  flex: 1;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+}
+
+.dash-stop-top {
+  stop-color: var(--device-accent);
+  stop-opacity: 0.35;
+}
+
+.dash-stop-bottom {
+  stop-color: var(--device-accent);
+  stop-opacity: 0;
+}
+
+.dash-line {
+  stroke: var(--device-accent);
+}
+
+/* Phone */
+.hero-phone {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 27%;
+  aspect-ratio: 9 / 17.5;
+  padding: 2.4cqi 1.8cqi;
+  border: 1px solid var(--device-edge);
+  border-radius: clamp(18px, 5cqi, 30px);
+  background: var(--device-frame);
+  box-shadow:
+    0 24px 50px rgba(2, 8, 22, 0.55),
+    0 0 0 4px rgba(2, 8, 22, 0.25);
+}
+
+.hero-phone-screen {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100%;
+  overflow: hidden;
+  padding: 10px;
+  border-radius: clamp(12px, 3.6cqi, 22px);
+  background: var(--device-screen);
+}
+
+.app-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--hero-text);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.app-status i {
+  width: 18px;
+  height: 8px;
+  border: 1.5px solid currentColor;
+  border-radius: 3px;
+  opacity: 0.7;
+}
+
+.app-balance {
+  display: grid;
+  gap: 2px;
+  padding: 10px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--accent), #6d4de6);
+  color: #fff;
+}
+
+.app-balance span {
+  overflow: hidden;
+  font-size: 0.75rem;
+  font-style: normal;
+  opacity: 0.9;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.app-balance .app-label-short {
+  display: none;
+}
+
+.app-balance strong {
+  font-size: clamp(1rem, 3.6cqi, 1.3rem);
+  letter-spacing: -0.02em;
+}
+
+.app-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.app-actions span {
+  padding: 6px 0;
+  border: 1px solid var(--hero-card-border);
+  border-radius: 8px;
+  background: var(--hero-card-inset);
+  color: var(--hero-text);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.app-list {
+  display: grid;
+  gap: 6px;
+}
+
+.app-row {
+  display: grid;
+  grid-template-columns: 8px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 7px;
+  border-radius: 8px;
+  background: var(--hero-card-inset);
+  color: var(--hero-muted);
+  font-size: 0.75rem;
+}
+
+.app-row i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--hero-muted);
+  opacity: 0.6;
+}
+
+.app-row i.is-in {
+  background: var(--device-positive);
+  opacity: 1;
+}
+
+.app-row span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.app-row b {
+  color: var(--hero-text);
+  font-weight: 700;
+}
+
+/* Narrow compositions show fewer details, never smaller text. */
+@container (max-width: 560px) {
+  .dash-kpi-extra {
+    display: none;
+  }
+
+  .dash-kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@container (max-width: 420px) {
+  /* A wider, shorter phone keeps its 12px labels from truncating. */
+  .app-balance .app-label-long {
+    display: none;
+  }
+
+  .app-balance .app-label-short {
+    display: block;
+  }
+
+  .hero-phone {
+    width: 34%;
+    aspect-ratio: 9 / 14;
+  }
+
+  .app-actions {
+    display: none;
+  }
+
+  .hero-laptop-screen {
+    grid-template-columns: 16% minmax(0, 1fr);
+  }
+
+  .dash-sidebar {
+    align-items: center;
+    padding: 12px 6px;
+  }
+
+  .dash-nav {
+    justify-content: center;
+    padding: 6px;
+  }
+
+  .dash-nav b,
+  .dash-pill,
+  .dash-chart > span,
+  .app-row b {
+    display: none;
+  }
+
+  .dash-main {
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .app-row {
+    grid-template-columns: 8px minmax(0, 1fr);
+  }
+}
+
+/* One-time entrance: heading → text → buttons → visual, 400ms each with
+   50ms steps (550ms total). */
+.home-hero.is-intro-waiting .hero-rise {
+  opacity: 0;
+}
+
+.home-hero.is-intro-playing .hero-rise {
+  animation: heroRise 400ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.home-hero.is-intro-playing .home-hero-title {
+  animation-delay: 0ms;
+}
+
+.home-hero.is-intro-playing .home-hero-lede {
+  animation-delay: 50ms;
+}
+
+.home-hero.is-intro-playing .home-hero-actions,
+.home-hero.is-intro-playing .home-hero-trust {
+  animation-delay: 100ms;
+}
+
+.home-hero.is-intro-playing .home-hero-visual {
+  animation-delay: 150ms;
+}
+
+@keyframes heroRise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-hero .hero-rise {
+    opacity: 1;
+    animation: none !important;
+  }
+}
+
+/* Tablet: stack the visual under the copy. -------------------------------- */
+
+@media (max-width: 960px) {
+  .home-hero {
+    min-height: 0;
+  }
+
+  .home-hero-inner {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .home-hero-title {
+    max-width: 20ch;
+  }
+
+  .hero-devices {
+    max-width: 620px;
+    margin: 0 auto;
+  }
+}
+
+/* Mobile: full-width buttons, smaller visual. ----------------------------- */
+
+@media (max-width: 600px) {
+  /* Taller stage so the phone sits below the laptop KPI row. */
+  .hero-devices {
+    aspect-ratio: 100 / 96;
+  }
+
+  .home-hero-title {
+    font-size: clamp(2rem, 8.4vw, 2.5rem);
+  }
+
+  .home-hero-actions {
+    width: 100%;
+  }
+
+  .home-hero-actions > a {
+    flex: 1 1 100%;
+    justify-content: center;
+  }
+
+  .home-hero-trust {
+    align-items: flex-start;
+  }
+
+  .home-hero-trust .icon {
+    margin-top: 3px;
+  }
+}

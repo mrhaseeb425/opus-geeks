@@ -1,0 +1,1002 @@
+/* ==========================================================================
+   Typography + content layer. Loaded last (see main.jsx), so it owns:
+   - the type scale (H1 / H2 / H3 / lead / body / card copy)
+   - text colors (WCAG AA 4.5:1+ in both themes, see tokens below)
+   - line length, wrapping and heading rhythm
+   - section header variants, photo cards, galleries and the small global
+     widgets (back-to-top, mobile call bar)
+   ========================================================================== */
+
+/* Tokens ------------------------------------------------------------------ */
+
+:root {
+  /* Desktop targets: H1 64px, H2 44px, H3 22px, lead 20px, body 17px. */
+  --fs-h1: clamp(2.5rem, 1.6rem + 3.2vw, 4rem);
+  --fs-h1-page: clamp(2.25rem, 1.5rem + 2.6vw, 3.5rem);
+  --fs-h2: clamp(1.875rem, 1.2rem + 2vw, 2.75rem);
+  --fs-h3: clamp(1.1875rem, 1.05rem + 0.4vw, 1.375rem);
+  --fs-lead: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+  --fs-body: clamp(1rem, 0.96rem + 0.12vw, 1.0625rem);
+  --fs-card: clamp(0.9375rem, 0.9rem + 0.12vw, 1rem);
+  --fs-eyebrow: 0.8125rem;
+  --lh-body: 1.6;
+  --measure: 65ch;
+  --tracking-tight: -0.02em;
+
+  /* Contrast (on --surface / --bg / --surface-alt): body 8.1:1+,
+     muted 6.3:1+, subtle 5.4:1+. */
+  --text-body: #334155;
+  --text-muted: #4b5a70;
+  --text-subtle: #56637a;
+}
+
+:root[data-theme="dark"] {
+  /* On --surface / --bg / --surface-alt: muted 9.6:1+, subtle 7.4:1+. */
+  --text-body: #d6deea;
+  --text-muted: #b8c3d4;
+  --text-subtle: #9eabbf;
+}
+
+body {
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+
+/* Headings ---------------------------------------------------------------- */
+
+h1,
+h2,
+h3,
+h4,
+.section-title {
+  text-wrap: balance;
+}
+
+p,
+li,
+blockquote,
+dd {
+  text-wrap: pretty;
+}
+
+.page-header h1,
+.services-hero-title,
+.case-study-page .case-study-title,
+.article-page .article-title {
+  max-width: 20ch;
+  font-size: var(--fs-h1-page);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: var(--tracking-tight);
+}
+
+.services-hero-title {
+  margin-inline: auto;
+}
+
+.home-hero-title {
+  max-width: 15ch;
+  font-size: var(--fs-h1);
+  line-height: 1.04;
+  letter-spacing: var(--tracking-tight);
+}
+
+.section-title,
+.cta-banner-inner h2,
+.blog-featured-copy h2 {
+  font-size: var(--fs-h2);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: var(--tracking-tight);
+}
+
+.section-title {
+  margin: 0 0 16px;
+}
+
+.card-glass h3,
+.industry-card h3,
+.process-step h3,
+.team-card h3,
+.why-item h3,
+.home-page .service-card h3,
+.home-page .industry-card h3,
+.home-page .process-step h3,
+.portfolio-card-body h3,
+.blog-card-copy h3,
+.roles-empty h3,
+.role-row h3,
+.cs-block h2,
+.case-study-sections h3 {
+  font-size: var(--fs-h3);
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: var(--tracking-tight);
+}
+
+.section-eyebrow,
+.faq-eyebrow,
+.services-hero-eyebrow,
+.home-hero-eyebrow {
+  font-size: var(--fs-eyebrow);
+  letter-spacing: 0.14em;
+}
+
+/* Body copy --------------------------------------------------------------- */
+
+.section-subtitle,
+.page-header-subtitle,
+.services-hero-subtitle,
+.home-hero-lede,
+.case-study-lede,
+.article-lede {
+  max-width: var(--measure);
+  font-size: var(--fs-lead);
+  line-height: var(--lh-body);
+}
+
+.section-subtitle,
+.page-header-subtitle,
+.case-study-lede,
+.article-lede {
+  color: var(--text-muted);
+}
+
+.section-head:not(.is-split):not(.is-stacked) .section-subtitle {
+  margin-inline: auto;
+}
+
+.about-copy,
+.cs-block p,
+.case-study-sections p,
+.blog-rich-copy p,
+.faq-answer,
+.roles-empty p,
+.booking-card p,
+.cta-banner-inner p {
+  max-width: var(--measure);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+
+.about-copy,
+.cs-block p,
+.case-study-sections p,
+.blog-rich-copy p,
+.faq-answer,
+.roles-empty p,
+.booking-card p {
+  color: var(--text-body);
+}
+
+.blog-rich-copy p {
+  max-width: 68ch;
+  font-size: clamp(1.0625rem, 1rem + 0.2vw, 1.125rem);
+  line-height: 1.7;
+}
+
+/* Card descriptions: 15px minimum, 16px on desktop. */
+.card-glass p,
+.industry-card p,
+.process-step p,
+.team-card p,
+.why-item p,
+.service-card p,
+.portfolio-card-body > p:not(.portfolio-result),
+.blog-card-copy p,
+.value-card p,
+.perk-card p {
+  max-width: 60ch;
+  color: var(--text-muted);
+  font-size: var(--fs-card);
+  line-height: var(--lh-body);
+}
+
+.card-glass h3,
+.service-card h3,
+.team-card h3,
+.industry-card h3,
+.process-step h3,
+.why-item h3 {
+  color: var(--text-strong);
+}
+
+/* Section header variants ------------------------------------------------- */
+
+/* Split: heading left, intro (+ action) right. */
+.section-head.is-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  align-items: end;
+  gap: clamp(20px, 4vw, 64px);
+  max-width: none;
+  margin-inline: 0;
+  text-align: left;
+}
+
+.section-head.is-split .section-title {
+  max-width: 18ch;
+  margin-bottom: 0;
+}
+
+.section-head-aside .section-subtitle {
+  margin: 0;
+}
+
+.section-head-action {
+  margin-top: 20px;
+}
+
+/* Stacked: left-aligned column beside content. */
+.section-head.is-stacked {
+  max-width: 34rem;
+  margin-inline: 0;
+  text-align: left;
+}
+
+.section-head.is-stacked .section-subtitle {
+  margin-inline: 0;
+}
+
+@media (max-width: 860px) {
+  .section-head.is-split {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .section-head.is-split .section-title {
+    max-width: none;
+  }
+}
+
+/* Two-column sections: header left, content right ----------------------- */
+
+.why-grid,
+.faq-preview-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  align-items: start;
+  gap: clamp(32px, 5vw, 80px);
+}
+
+.why-grid .section-head,
+.faq-preview-grid .section-head {
+  position: sticky;
+  top: calc(var(--header-h) + 32px);
+  margin-bottom: 0;
+}
+
+@media (max-width: 960px) {
+  .why-grid,
+  .faq-preview-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+
+  .why-grid .section-head,
+  .faq-preview-grid .section-head {
+    position: static;
+  }
+}
+
+/* Why Opus Geeks ---------------------------------------------------------- */
+
+.why-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.why-item {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: clamp(22px, 2.2vw, 28px);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--surface);
+  transition:
+    transform 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.why-item:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent-border);
+  box-shadow: var(--shadow-card);
+}
+
+.why-item h3 {
+  margin: 0 0 6px;
+}
+
+.why-item p {
+  margin: 0;
+}
+
+@media (max-width: 560px) {
+  .why-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Home FAQ preview -------------------------------------------------------- */
+
+.faq-preview-grid .faq-list {
+  margin: 0;
+}
+
+/* Service cards with a photo --------------------------------------------- */
+
+.service-card.has-media {
+  --card-pad: clamp(20px, 2vw, 26px);
+  overflow: hidden;
+  padding: 0 var(--card-pad) var(--card-pad);
+}
+
+.card-media {
+  display: block;
+  aspect-ratio: 16 / 10;
+  margin: 0 calc(var(--card-pad) * -1) 0;
+  overflow: hidden;
+  background: var(--surface-3);
+}
+
+.card-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.service-card.has-media:hover .card-media img {
+  transform: scale(1.05);
+}
+
+/* The icon badge overlaps the bottom edge of the photo. */
+.service-card.has-media .card-icon-badge {
+  position: relative;
+  margin: -26px 0 16px;
+  border: 3px solid var(--surface);
+  box-sizing: content-box;
+}
+
+/* Industry cards: photo background under a dark overlay ------------------ */
+
+.industry-card.has-photo {
+  position: relative;
+  display: flex;
+  min-height: clamp(300px, 26vw, 360px);
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  isolation: isolate;
+  border: 1px solid var(--border);
+  background: #0b1427;
+  color: #fff;
+}
+
+.industry-card-photo {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.industry-card.has-photo::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  /* Overlay keeps text >= 7:1 over the brightest part of any photo. */
+  background: linear-gradient(
+    180deg,
+    rgba(7, 13, 28, 0.2) 0%,
+    rgba(7, 13, 28, 0.62) 42%,
+    rgba(7, 13, 28, 0.94) 100%
+  );
+}
+
+.industry-card.has-photo:hover .industry-card-photo {
+  transform: scale(1.05);
+}
+
+.industry-card.has-photo h3 {
+  color: #fff;
+}
+
+.industry-card.has-photo p {
+  color: #dbe4f1;
+}
+
+.industry-card.has-photo .card-icon-badge {
+  margin-bottom: auto;
+  border-color: rgba(255, 255, 255, 0.24);
+  background: rgba(8, 16, 34, 0.55);
+  color: #cfe0ff;
+}
+
+/* Photo galleries (About, Careers) and the contact photo ----------------- */
+
+.photo-gallery {
+  display: grid;
+  gap: clamp(12px, 1.4vw, 20px);
+}
+
+.photo-tile {
+  margin: 0;
+  overflow: hidden;
+  border-radius: 18px;
+  background: var(--surface-3);
+}
+
+.photo-tile img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.photo-tile:hover img {
+  transform: scale(1.04);
+}
+
+.about-gallery {
+  grid-template-columns: 2fr 1fr 1fr;
+}
+
+.about-gallery-section {
+  padding-top: 0;
+}
+
+.careers-why-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  align-items: start;
+  gap: clamp(28px, 4vw, 64px);
+}
+
+.careers-why-grid .perks-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.careers-gallery {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  position: sticky;
+  top: calc(var(--header-h) + 32px);
+}
+
+.careers-gallery .is-wide {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 960px) {
+  .careers-why-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .careers-gallery {
+    position: static;
+  }
+}
+
+@media (max-width: 720px) {
+  .about-gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .about-gallery .is-wide {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 560px) {
+  .careers-why-grid .perks-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Careers empty state ----------------------------------------------------- */
+
+.roles-empty .btn-gradient {
+  margin-top: 20px;
+}
+
+/* Case study cards: one big result --------------------------------------- */
+
+.portfolio-result {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+  margin: 0 0 12px;
+}
+
+.portfolio-result strong {
+  margin: 0;
+  font-size: clamp(2rem, 1.4rem + 1.6vw, 2.75rem);
+  line-height: 1;
+}
+
+.portfolio-result span {
+  color: var(--text-muted);
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.portfolio-card-body h3 {
+  margin: 0 0 8px;
+}
+
+/* Consistent hover / focus motion (transform + color only) --------------- */
+
+.btn-gradient,
+.btn-secondary,
+.faq-cta-button {
+  transition:
+    transform 200ms ease,
+    background-color 200ms ease,
+    border-color 200ms ease,
+    color 200ms ease,
+    box-shadow 200ms ease;
+}
+
+.btn-gradient:hover,
+.btn-secondary:hover,
+.faq-cta-button:hover {
+  transform: translateY(-2px);
+}
+
+.btn-gradient:active,
+.btn-secondary:active,
+.faq-cta-button:active {
+  transform: translateY(0);
+}
+
+.card-glass,
+.team-card,
+.industry-card,
+.portfolio-card,
+.blog-card-premium {
+  transition:
+    transform 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.team-card:hover,
+.industry-card:hover {
+  transform: translateY(-3px);
+}
+
+.footer-link-list a,
+.contact-info-copy a,
+.blog-related a {
+  transition: color 180ms ease;
+}
+
+.footer-link-list a:hover,
+.blog-related a:hover {
+  color: var(--accent-text);
+}
+
+/* Back to top ------------------------------------------------------------- */
+
+.back-to-top {
+  position: fixed;
+  right: clamp(16px, 2vw, 28px);
+  bottom: clamp(16px, 2vw, 28px);
+  z-index: 800;
+  display: grid;
+  width: 46px;
+  height: 46px;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--text-strong);
+  box-shadow: var(--shadow-card);
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(8px);
+  transition:
+    opacity 200ms ease,
+    transform 200ms ease,
+    border-color 200ms ease,
+    color 200ms ease;
+}
+
+.back-to-top.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: none;
+}
+
+.back-to-top:hover {
+  border-color: var(--accent-text);
+  color: var(--accent-text);
+  transform: translateY(-2px);
+}
+
+.back-to-top-icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* Mobile-only sticky "Book a call" ---------------------------------------- */
+
+.mobile-call-bar {
+  display: none;
+}
+
+@media (max-width: 720px) {
+  .mobile-call-bar {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 790;
+    display: block;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+    border-top: 1px solid var(--border);
+    background: var(--surface-glass);
+    transform: translateY(110%);
+    transition: transform 240ms ease;
+  }
+
+  .mobile-call-bar.is-visible {
+    transform: none;
+  }
+
+  .mobile-call-button {
+    width: 100%;
+  }
+
+  /* Room for the bar so it never covers the footer's last line. */
+  .app-shell {
+    padding-bottom: calc(72px + env(safe-area-inset-bottom));
+  }
+
+  .back-to-top {
+    bottom: calc(84px + env(safe-area-inset-bottom));
+  }
+}
+
+/* Short, multi-line copy (cards, lists, case study blocks) balances its
+   lines, which also prevents one-word last lines where `pretty` doesn't. */
+.card-glass p,
+.team-card p,
+.industry-card p,
+.why-item p,
+.process-step p,
+.service-list li,
+.portfolio-card-body > p,
+.blog-card-copy p,
+.cs-block p,
+.case-study-sections p,
+.contact-next-steps li {
+  text-wrap: balance;
+}
+
+/* Fixes for rules elsewhere that set copy below the minimums -------------- */
+
+/* Tailwind's preflight resets heading weight to inherit (400). */
+h1,
+h2 {
+  font-weight: 700;
+}
+
+h3,
+h4 {
+  font-weight: 600;
+}
+
+.home-page .service-card p,
+.home-page .industry-card p,
+.home-page .process-step p,
+.faq-page .faq-answer,
+.faq-answer {
+  font-size: var(--fs-card);
+  line-height: var(--lh-body);
+}
+
+.faq-page .faq-answer,
+.faq-answer {
+  font-size: var(--fs-body);
+}
+
+.home-page .industry-card.has-photo p {
+  color: #dbe4f1;
+}
+
+.service-list li,
+.service-feature-copy .service-list li,
+.contact-info-list .contact-info-item,
+.contact-next-steps li,
+.blog-author-bio p {
+  font-size: var(--fs-card);
+  line-height: 1.55;
+}
+
+.home-hero-trust {
+  font-size: 0.9375rem;
+}
+
+.faq-page .faq-title {
+  font-size: var(--fs-h1-page);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: var(--tracking-tight);
+}
+
+.service-feature-copy h2,
+.cs-results h2,
+.cs-gallery h2 {
+  font-size: clamp(1.75rem, 1.3rem + 1.3vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: var(--tracking-tight);
+}
+
+.blog-rich-copy h2,
+.article-page .blog-rich-copy h2 {
+  font-size: clamp(1.5rem, 1.25rem + 0.8vw, 1.875rem);
+  font-weight: 700;
+  letter-spacing: var(--tracking-tight);
+}
+
+.blog-rich-copy h3 {
+  font-size: var(--fs-h3);
+  font-weight: 600;
+}
+
+.booking-title,
+.contact-info-title,
+.blog-related h2,
+.blog-related h3 {
+  font-size: var(--fs-h3);
+  font-weight: 600;
+  letter-spacing: var(--tracking-tight);
+}
+
+.home-hero-title .hero-highlight {
+  white-space: nowrap;
+}
+
+.roles-empty > .icon {
+  margin-inline: auto;
+}
+
+/* <picture> wrappers from components/Photo.jsx never add a box of their own,
+   so existing `img` layout rules keep working unchanged. */
+.photo-picture {
+  display: contents;
+}
+
+.case-study-gallery-frame {
+  position: absolute;
+  inset: 0;
+}
+
+.why-item .card-icon-badge {
+  margin: 0;
+}
+
+/* Route change: 150ms fade-in of the new page. `backwards` fill only applies
+   before/while running, so once finished the page has no animation, opacity
+   or stacking context left on it (drawers stay above the header). */
+@keyframes pageEnter {
+  from {
+    opacity: 0.4;
+  }
+}
+
+.page-enter {
+  animation: pageEnter 150ms ease-out backwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-enter {
+    animation: none;
+  }
+}
+
+/* Portfolio grid: 1 column on phones, 2 on tablets, 3 from 1200px, with
+   compact 16:10 images. */
+.portfolio-grid {
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(16px, 2vw, 24px);
+}
+
+@media (min-width: 700px) {
+  .portfolio-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1200px) {
+  .portfolio-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .portfolio-card-body {
+    padding: 20px 22px 22px;
+  }
+
+  .portfolio-result strong {
+    font-size: clamp(1.75rem, 1rem + 1.2vw, 2.25rem);
+  }
+}
+
+.portfolio-card-image {
+  aspect-ratio: 16 / 10;
+}
+
+/* FAQ accordion: the answer's row animates 0fr -> 1fr and its content is
+   clipped, so an opening answer pushes the next question down smoothly
+   instead of painting over it. */
+.faq-answer-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 280ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.faq-item.is-open .faq-answer-wrap {
+  grid-template-rows: 1fr;
+}
+
+.faq-answer-clip {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.faq-answer-clip .faq-answer {
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+.faq-item.is-open .faq-answer-clip .faq-answer {
+  opacity: 1;
+  transition-delay: 60ms;
+}
+
+.faq-chevron {
+  transition: transform 200ms ease;
+}
+
+.faq-chevron.is-open {
+  transform: rotate(180deg);
+}
+
+/* Contact: neither column stretches to the other's height; the right column
+   is one card with three sections (book a call, details, next steps). */
+.contact-grid {
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  align-items: start;
+}
+
+.contact-form {
+  height: auto;
+}
+
+.contact-panel {
+  display: grid;
+  gap: 0;
+  padding: 0;
+}
+
+.contact-panel-section {
+  padding: clamp(20px, 2vw, 26px) clamp(20px, 2.2vw, 28px);
+}
+
+.contact-panel-section + .contact-panel-section {
+  border-top: 1px solid var(--border);
+}
+
+.contact-panel .booking-card {
+  padding: clamp(20px, 2vw, 26px) clamp(20px, 2.2vw, 28px);
+  border: 0;
+  background: none;
+  box-shadow: none;
+}
+
+.contact-panel .contact-info-title {
+  margin: 0 0 14px;
+}
+
+.contact-panel .contact-info-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 20px;
+}
+
+.contact-panel .contact-info-icon {
+  width: 36px;
+  height: 36px;
+}
+
+.contact-panel .contact-next-steps {
+  margin: 0;
+  border-width: 1px 0 0;
+  border-style: solid;
+  border-color: var(--border);
+  border-radius: 0;
+  background: none;
+}
+
+.contact-panel .contact-next-steps ol {
+  gap: 6px;
+  padding-left: 1.25rem;
+  list-style: decimal;
+}
+
+.contact-panel .contact-next-steps li::marker {
+  color: var(--accent-text);
+  font-weight: 700;
+}
+
+.contact-panel .footer-social-link {
+  border-color: var(--border);
+  background: var(--surface-2);
+  color: var(--text-muted);
+}
+
+.contact-panel .footer-social-link:hover {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #fff;
+}
+
+.contact-panel .contact-socials {
+  margin-top: 18px;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.contact-panel .footer-social-link {
+  margin-top: 0;
+}
+
+@media (max-width: 1100px) {
+  .contact-panel .contact-info-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .contact-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Footer: the current page is marked with color + a thin underline only —
+   no background box, so it never reads as selected text. */
+.site-footer .footer-link-list a {
+  background: none;
+  text-decoration: none;
+  text-underline-offset: 5px;
+  text-decoration-thickness: 1px;
+}
+
+.site-footer .footer-link-list a[aria-current="page"] {
+  color: #f3f7ff;
+  text-decoration-line: underline;
+  text-decoration-color: rgba(114, 165, 255, 0.7);
+}
+
+.site-footer .footer-link-list a:hover {
+  color: #8db7ff;
+}

@@ -1,22 +1,43 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import Icon from "../components/Icon";
-import Magnetic from "../components/Magnetic";
+import PageHeader from "../components/PageHeader";
 import Reveal from "../components/Reveal";
-import { CONTACT, SOCIALS } from "../data/site";
+import { CONTACT, SERVICES, SOCIALS } from "../data/site";
 
 const INITIAL_FORM = { name: "", email: "", service: "", message: "" };
-const SERVICE_OPTIONS = [
-  "App Development",
-  "Web Development",
-  "UX/UI Design",
-  "Game Development",
-  "Something else",
-];
+const SERVICE_OPTIONS = [...SERVICES.map((s) => s.name), "Something else"];
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-function ServiceSelect({ value, onChange }) {
+// Every message is specific about what is wrong and how to fix it, and each
+// one is tied to its field with aria-describedby below.
+function validate(form) {
+  const errors = {};
+  if (!form.name.trim()) errors.name = "Enter your full name.";
+  if (!form.email.trim()) errors.email = "Enter your email address.";
+  else if (!EMAIL_PATTERN.test(form.email.trim()))
+    errors.email = "Enter a valid email address, like jane@company.com.";
+  if (!form.service) errors.service = "Choose the service you need.";
+  if (!form.message.trim())
+    errors.message = "Tell us a little about your project.";
+  else if (form.message.trim().length < 20)
+    errors.message = "Add a bit more detail — at least 20 characters.";
+  return errors;
+}
+
+function FieldError({ id, message }) {
+  if (!message) return null;
+  return (
+    <p className="ed-field-error" id={id}>
+      <Icon name="minus" className="icon-sm" aria-hidden="true" />
+      {message}
+    </p>
+  );
+}
+
+function ServiceSelect({ value, onChange, invalid, describedBy }) {
   const [isOpen, setIsOpen] = useState(false);
   const selectRef = useRef(null);
-  const selectedLabel = value || "Select a service";
+  const listId = useId();
 
   useEffect(() => {
     const handlePointerDown = (event) => {
@@ -32,23 +53,28 @@ function ServiceSelect({ value, onChange }) {
   };
 
   return (
-    <div className={`custom-select ${isOpen ? "is-open" : ""}`} ref={selectRef}>
+    <div className={`ed-select ${isOpen ? "is-open" : ""}`} ref={selectRef}>
       <button
         type="button"
         id="service"
-        className="custom-select-trigger"
+        className="ed-select-trigger"
         aria-haspopup="listbox"
         aria-expanded={isOpen}
-        aria-controls="service-options"
+        aria-controls={listId}
+        aria-invalid={invalid || undefined}
+        aria-describedby={describedBy}
         onClick={() => setIsOpen((open) => !open)}
+        onKeyDown={(event) => event.key === "Escape" && setIsOpen(false)}
       >
-        <span className={!value ? "is-placeholder" : ""}>{selectedLabel}</span>
-        <span className="custom-select-caret" aria-hidden="true" />
+        <span className={value ? "" : "is-placeholder"}>
+          {value || "Select a service"}
+        </span>
+        <span className="ed-select-caret" aria-hidden="true" />
       </button>
       {isOpen && (
         <div
-          className="custom-select-options"
-          id="service-options"
+          className="ed-select-options"
+          id={listId}
           role="listbox"
           aria-label="Services"
         >
@@ -72,140 +98,125 @@ function ServiceSelect({ value, onChange }) {
 
 export default function ContactUs() {
   const [form, setForm] = useState(INITIAL_FORM);
+  const [errors, setErrors] = useState({});
   const [status, setStatus] = useState("idle"); // idle | submitted
+  const formRef = useRef(null);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setForm((prev) => ({ ...prev, [name]: value }));
+    // Clear a field's error as soon as the person starts fixing it.
+    setErrors((prev) => (prev[name] ? { ...prev, [name]: undefined } : prev));
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // No backend is wired up yet — this simply confirms receipt in the UI.
-    // Replace with a real submit (API route, Formspree, EmailJS, etc.) before
-    // launch so messages actually reach the team.
+    const nextErrors = validate(form);
+    setErrors(nextErrors);
+
+    const firstInvalid = Object.keys(nextErrors)[0];
+    if (firstInvalid) {
+      setStatus("idle");
+      formRef.current?.querySelector(`#${firstInvalid}`)?.focus();
+      return;
+    }
+
+    // TODO(integration): no backend is wired up yet — this simply confirms
+    // receipt in the UI. Replace with a real submit (API route, Formspree,
+    // EmailJS, etc.) before launch so messages actually reach the team.
     setStatus("submitted");
     setForm(INITIAL_FORM);
   };
 
+  const errorId = (field) => (errors[field] ? `${field}-error` : undefined);
+
   return (
-    <div className="page-hero">
-      <section className="page-header">
-        <Reveal as="div" className="frame">
-          <p className="section-eyebrow">Contact Us</p>
-          <h1>Let's build something together</h1>
-          <p className="page-header-subtitle">
-            Tell us about your project and we'll get back to you within one
-            business day.
-          </p>
-        </Reveal>
-      </section>
+    <div className="page-hero contact-page">
+      <PageHeader
+        eyebrow="Contact us"
+        title="Tell us about your project"
+        subtitle="Share a few details and we&rsquo;ll reply within one business day with questions and next steps."
+      />
 
-      <section className="section">
-        <div className="frame contact-grid">
-          <Reveal
-            as="form"
-            className="card-glass contact-form"
-            onSubmit={handleSubmit}
-          >
-            <div className="form-row">
-              <label htmlFor="name">Full name</label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                required
-                value={form.name}
-                onChange={handleChange}
-                placeholder="Jane Doe"
-              />
-            </div>
-
-            <div className="form-row">
-              <label htmlFor="email">Email address</label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                value={form.email}
-                onChange={handleChange}
-                placeholder="jane@company.com"
-              />
-            </div>
-
-            <div className="form-row">
-              <label htmlFor="service">Service you're interested in</label>
-              <ServiceSelect value={form.service} onChange={handleChange} />
-            </div>
-
-            <div className="form-row">
-              <label htmlFor="message">Project details</label>
-              <textarea
-                id="message"
-                name="message"
-                rows="5"
-                required
-                value={form.message}
-                onChange={handleChange}
-                placeholder="Tell us a bit about what you're building..."
-              />
-            </div>
-
-            <Magnetic>
-              <button className="btn-gradient" type="submit">
-                Send message <Icon name="arrowRight" className="icon-sm" />
-              </button>
-            </Magnetic>
-
-            {status === "submitted" && (
-              <p className="form-success" role="status">
-                <Icon name="check" className="icon-sm" />
-                Thanks — your message has been noted. We'll follow up by email
-                shortly.
-              </p>
-            )}
-          </Reveal>
-
-          <Reveal as="div" className="contact-side" delay={0.12}>
-            <div className="card-glass contact-info-card">
-              <h3>Contact details</h3>
-              <ul className="footer-contact-list contact-info-list">
-                <li className="contact-info-item">
-                  <span className="contact-info-icon">
-                    <Icon name="mail" />
-                  </span>
-                  <span className="contact-info-copy">
-                    <strong className="contact-info-label">Email</strong>
-                    <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
-                  </span>
+      <section className="section section-tight">
+        <div className="frame ed-contact">
+          {/* Details, offices and what happens after you send. */}
+          <Reveal as="div" className="ed-contact-details">
+            <div className="ed-contact-block">
+              <h2>Contact details</h2>
+              <ul className="ed-contact-list">
+                <li>
+                  <span className="ed-contact-label">Email</span>
+                  <a
+                    className="ed-contact-value"
+                    href={`mailto:${CONTACT.email}`}
+                  >
+                    {CONTACT.email}
+                  </a>
                 </li>
-                <li className="contact-info-item">
-                  <span className="contact-info-icon">
-                    <Icon name="phone" />
-                  </span>
-                  <span className="contact-info-copy">
-                    <strong className="contact-info-label">Phone</strong>
-                    <a href={`tel:${CONTACT.phoneHref}`}>{CONTACT.phone}</a>
-                  </span>
+                <li>
+                  <span className="ed-contact-label">Phone</span>
+                  <a
+                    className="ed-contact-value"
+                    href={`tel:${CONTACT.phoneHref}`}
+                  >
+                    {CONTACT.phone}
+                  </a>
                 </li>
                 {CONTACT.offices.map((office) => (
-                  <li className="contact-info-item" key={office.label}>
-                    <span className="contact-info-icon">
-                      <Icon name="pin" />
-                    </span>
-                    <span className="contact-info-copy">
-                      <strong className="contact-info-label">
-                        {office.label}
-                      </strong>
-                      <span className="contact-info-detail">
-                        {office.address}
-                      </span>
-                    </span>
+                  <li key={office.label}>
+                    <span className="ed-contact-label">{office.label}</span>
+                    <span className="ed-contact-detail">{office.address}</span>
                   </li>
                 ))}
               </ul>
+            </div>
 
+            <div className="ed-contact-block">
+              <h2>Book a 30-min call</h2>
+              <div className="ed-booking">
+                <p>
+                  Prefer to talk? Pick a time to walk through your project,
+                  timeline and budget with our team.
+                </p>
+                <a
+                  className="btn-secondary"
+                  href={
+                    CONTACT.calendlyUrl ??
+                    `mailto:${CONTACT.email}?subject=${encodeURIComponent(
+                      "30-minute call request",
+                    )}`
+                  }
+                  {...(CONTACT.calendlyUrl
+                    ? { target: "_blank", rel: "noreferrer noopener" }
+                    : {})}
+                >
+                  {CONTACT.calendlyUrl ? "Pick a time" : "Request a call time"}
+                  <Icon
+                    name={CONTACT.calendlyUrl ? "external" : "arrowRight"}
+                    className="icon-sm"
+                  />
+                </a>
+              </div>
+            </div>
+
+            {/* Mirrors the FAQs ("How do we get started?") and the
+                one-business-day reply promise above. */}
+            <div className="ed-contact-block">
+              <h2>What happens next</h2>
+              <ol className="ed-next-steps">
+                <li>
+                  <span>We read your brief and reply by email.</span>
+                </li>
+                <li>
+                  <span>A short call to understand your goals.</span>
+                </li>
+                <li>
+                  <span>
+                    You receive a proposal with scope and next steps.
+                  </span>
+                </li>
+              </ol>
               <div className="footer-socials contact-socials">
                 {SOCIALS.map((social) => (
                   <a
@@ -222,6 +233,94 @@ export default function ContactUs() {
               </div>
             </div>
           </Reveal>
+
+          {/* Minimal underline form. Labels stay visible at all times. */}
+          {/* A plain <form>: it holds the ref used to focus the first
+              invalid field, and a form should never fade in. */}
+          <form
+            className="ed-form"
+            onSubmit={handleSubmit}
+            noValidate
+            ref={formRef}
+            aria-label="Project enquiry"
+          >
+            <div className={`ed-field ${errors.name ? "has-error" : ""}`}>
+              <label htmlFor="name">Full name</label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                autoComplete="name"
+                value={form.name}
+                onChange={handleChange}
+                placeholder="Jane Doe"
+                aria-invalid={Boolean(errors.name)}
+                aria-describedby={errorId("name")}
+              />
+              <FieldError id="name-error" message={errors.name} />
+            </div>
+
+            <div className={`ed-field ${errors.email ? "has-error" : ""}`}>
+              <label htmlFor="email">Email address</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                value={form.email}
+                onChange={handleChange}
+                placeholder="jane@company.com"
+                aria-invalid={Boolean(errors.email)}
+                aria-describedby={errorId("email")}
+              />
+              <FieldError id="email-error" message={errors.email} />
+            </div>
+
+            <div className={`ed-field ${errors.service ? "has-error" : ""}`}>
+              <span className="ed-field-label" id="service-label">
+                Service you need
+              </span>
+              <ServiceSelect
+                value={form.service}
+                onChange={handleChange}
+                invalid={Boolean(errors.service)}
+                describedBy={
+                  `service-label${errors.service ? " service-error" : ""}`
+                }
+              />
+              <FieldError id="service-error" message={errors.service} />
+            </div>
+
+            <div className={`ed-field ${errors.message ? "has-error" : ""}`}>
+              <label htmlFor="message">Project details</label>
+              <textarea
+                id="message"
+                name="message"
+                rows="6"
+                value={form.message}
+                onChange={handleChange}
+                placeholder="What are you building, and who is it for?"
+                aria-invalid={Boolean(errors.message)}
+                aria-describedby={errorId("message")}
+              />
+              <FieldError id="message-error" message={errors.message} />
+            </div>
+
+            <div className="ed-form-footer">
+              <button className="btn-gradient" type="submit">
+                Send project details{" "}
+                <Icon name="arrowRight" className="icon-sm" />
+              </button>
+              <p className="ed-form-note">We reply within one business day.</p>
+            </div>
+
+            {status === "submitted" && (
+              <p className="ed-form-success" role="status">
+                <Icon name="check" className="icon-sm" aria-hidden="true" />
+                Thanks, your details are in. Watch your inbox for our reply.
+              </p>
+            )}
+          </form>
         </div>
       </section>
     </div>

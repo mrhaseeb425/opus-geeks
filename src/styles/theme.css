@@ -1,0 +1,217 @@
+/* ==========================================================================
+   Theme tokens
+   Every light/dark-sensitive surface, text and border color in App.css reads
+   from these variables, so both themes are defined in exactly one place.
+   Contrast targets (WCAG AA): text-strong/text-body/text-muted >= 4.5:1 and
+   text-subtle >= 4.5:1 against --surface, --surface-alt and --bg.
+   ========================================================================== */
+
+:root {
+  color-scheme: light;
+  --bg: #f7f9fc;
+  --surface: #ffffff;
+  --surface-2: #f5f8fc;
+  --surface-3: #dce6f2;
+  --surface-alt: #eef4fb;
+  --surface-glass: rgba(255, 255, 255, 0.92);
+  --border: #dfe6ef;
+  --border-strong: #c3cfdd;
+  --text-strong: #172033;
+  --text-body: #334155;
+  --text-muted: #56637a;
+  --text-subtle: #64738a;
+  --accent: #1769ff;
+  --accent-hover: #0d56d8;
+  --accent-text: #1459d9;
+  --accent-soft: #edf3ff;
+  --accent-border: #c8daff;
+  --star: #f5a524;
+  --shadow-card: 0 16px 42px rgba(31, 48, 72, 0.06);
+  --shadow-raised: 0 22px 48px rgba(23, 105, 255, 0.12);
+  --overlay: rgba(4, 10, 26, 0.56);
+
+  /* Home hero: the brand's dark stage in both themes. */
+  --hero-bg-start: #0b1631;
+  --hero-bg-end: #0a1224;
+  --hero-glow: rgba(56, 108, 255, 0.22);
+  --hero-edge: transparent;
+  --hero-text: #f3f7ff;
+  --hero-muted: #b3c1d6;
+  --hero-accent-text: #a9c6ff;
+  --hero-chip-bg: rgba(59, 130, 246, 0.12);
+  --hero-chip-border: rgba(125, 170, 255, 0.28);
+  --hero-card-bg: #111c33;
+  --hero-card-inset: rgba(255, 255, 255, 0.04);
+  --hero-card-border: rgba(148, 178, 232, 0.16);
+  /* Device mockup in the hero (laptop + phone). */
+  --device-frame: #1b2438;
+  --device-base: #111827;
+  --device-edge: rgba(170, 196, 240, 0.22);
+  --device-screen: #0f182c;
+  --device-panel: rgba(255, 255, 255, 0.03);
+  --device-accent: #7aa2ff;
+  --device-positive: #8ff0c9;
+
+  /* Layout scale shared by sections, anchors and the sticky header. */
+  --header-h: 84px;
+  --section-y: clamp(64px, 7vw, 104px);
+  --section-y-tight: clamp(40px, 5vw, 64px);
+  --head-gap: clamp(32px, 4vw, 48px);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0b1220;
+  --surface: #121b2d;
+  --surface-2: #0f1828;
+  --surface-3: #1b2740;
+  --surface-alt: #0e1627;
+  --surface-glass: rgba(18, 27, 45, 0.94);
+  --border: #24324a;
+  --border-strong: #34476a;
+  --text-strong: #eef3fb;
+  --text-body: #d0d9e6;
+  --text-muted: #a9b6ca;
+  --text-subtle: #8d9bb2;
+  --accent-text: #86b4ff;
+  --accent-soft: rgba(56, 120, 255, 0.16);
+  --accent-border: rgba(134, 180, 255, 0.34);
+  --star: #fbbf24;
+  --shadow-card: 0 16px 40px rgba(0, 0, 0, 0.32);
+  --shadow-raised: 0 22px 48px rgba(0, 0, 0, 0.45);
+  --overlay: rgba(2, 6, 16, 0.7);
+  --hero-bg-start: #0d1a36;
+  --hero-bg-end: var(--bg);
+  --hero-edge: var(--border);
+  --hero-card-bg: var(--surface);
+  --device-frame: #19223a;
+  --device-base: #0c1322;
+  --device-screen: #0d1528;
+}
+
+@media (max-width: 1100px) {
+  :root {
+    --header-h: 76px;
+  }
+}
+
+html {
+  /* Anchor jumps (/services/web-development, TOC links) land below the
+     sticky header instead of underneath it. */
+  scroll-padding-top: calc(var(--header-h) + 16px);
+  /* Keeps the layout from shifting when a drawer hides the scrollbar. */
+  scrollbar-gutter: stable;
+  background: var(--bg);
+}
+
+/* Native scrolling everywhere; only anchor/section jumps are smoothed. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+}
+
+.app-shell {
+  color: var(--text-body);
+  background:
+    radial-gradient(
+      circle at 85% 12%,
+      rgba(23, 105, 255, 0.07),
+      transparent 20%
+    ),
+    var(--bg);
+}
+
+section[id],
+[id].service-detail,
+.blog-rich-copy h2[id],
+.blog-rich-copy h3[id] {
+  scroll-margin-top: calc(var(--header-h) + 16px);
+}
+
+/* Balanced headings avoid one-word orphans ("The work has a measurable
+   after."), and pretty wrapping does the same for body copy. */
+h1,
+h2,
+h3,
+.section-title {
+  text-wrap: balance;
+}
+
+p,
+blockquote {
+  text-wrap: pretty;
+}
+
+/* One consistent, clearly visible keyboard focus ring. */
+:where(a, button, input, textarea, select, [tabindex]):focus-visible {
+  outline: 2px solid var(--accent-text);
+  outline-offset: 3px;
+}
+
+/* --------------------------------------------------------------------------
+   Dark theme refinements for components whose light styling is not a
+   simple token swap.
+   -------------------------------------------------------------------------- */
+
+:root[data-theme="dark"] .site-footer {
+  background: #070d18;
+  border-top-color: #1a2740;
+}
+
+:root[data-theme="dark"] .cta-banner-inner {
+  box-shadow: 0 24px 56px rgba(0, 0, 0, 0.35);
+}
+
+.contact-info-card .footer-social-link {
+  background: var(--surface-2);
+  border-color: var(--border);
+  color: var(--text-muted);
+}
+
+.contact-info-card .footer-social-link:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.contact-info-copy a {
+  color: var(--text-muted);
+}
+
+.contact-info-copy a:hover {
+  color: var(--accent-text);
+}
+
+.header-theme-toggle:focus-visible,
+.mobile-theme-toggle:focus-visible {
+  outline: 2px solid #86b4ff;
+}
+
+/* Theme toggle: all sections switch together with a short crossfade on
+   background and text color only (class added by lib/theme.js). */
+:root.theme-switching,
+:root.theme-switching *,
+:root.theme-switching *::before,
+:root.theme-switching *::after {
+  transition:
+    background-color 180ms ease,
+    color 180ms ease !important;
+}
+
+/* Reduced motion: keep state changes, drop movement. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
