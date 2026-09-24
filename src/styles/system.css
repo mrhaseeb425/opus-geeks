@@ -1301,3 +1301,153 @@ a.industry-card:hover .industry-card-photo {
     border-top: 1px solid var(--border);
   }
 }
+
+/* --------------------------------------------------------------------------
+   14. Very small phones (320px)
+   The header could not fit logo + toggle + booking pill + menu button at
+   320px and pushed the document 11px wide. The booking action already appears
+   twice on phones — inside the menu panel and in the sticky call bar — so the
+   header pill is the right thing to drop.
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 380px) {
+  .nav-actions {
+    gap: 8px;
+    margin-left: 10px;
+  }
+
+  .nav-actions .cta-button {
+    display: none;
+  }
+}
+
+/* Nothing may push the document wider than the viewport. */
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.ed-optional {
+  color: var(--text-subtle);
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* --------------------------------------------------------------------------
+   15. Hero WebGL scene
+   The fallback is painted first and always; the canvas fades in over it once
+   the scene is ready. Phones, reduced-motion visitors and anyone without
+   WebGL keep the fallback, so the hero is never an empty box.
+   -------------------------------------------------------------------------- */
+
+.hero-scene {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: var(--radius-media);
+  /* Its own containment: the scene never triggers layout elsewhere. */
+  contain: layout paint size;
+}
+
+.hero-scene-fallback {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      58% 58% at 62% 38%,
+      rgba(59, 123, 255, 0.28),
+      transparent 70%
+    ),
+    linear-gradient(150deg, #16233f 0%, #0d1526 62%, #0a0f1e 100%);
+}
+
+/* A faint grid, so the fallback reads as a considered surface rather than a
+   flat block while the scene loads. */
+.hero-scene-fallback::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.35;
+  background-image:
+    linear-gradient(rgba(148, 178, 232, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 178, 232, 0.07) 1px, transparent 1px);
+  background-size: 44px 44px;
+  -webkit-mask-image: radial-gradient(70% 70% at 50% 45%, #000, transparent);
+  mask-image: radial-gradient(70% 70% at 50% 45%, #000, transparent);
+}
+
+.hero-scene-canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 600ms ease;
+}
+
+.hero-scene.is-ready .hero-scene-canvas {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-scene-canvas {
+    transition: none;
+  }
+}
+
+/* The visual column no longer wraps a photo, so it needs no frame of its own. */
+.home-hero-visual {
+  overflow: visible;
+  border: 0;
+  aspect-ratio: auto;
+}
+
+@media (max-width: 960px) {
+  .hero-scene {
+    aspect-ratio: 16 / 11;
+    max-width: 560px;
+    margin-inline: auto;
+  }
+}
+
+/* The flat dashboard shown when the WebGL scene is not running. */
+.hero-scene-window {
+  position: absolute;
+  inset: clamp(18px, 6%, 44px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgba(148, 178, 232, 0.2);
+  border-radius: 14px;
+  background: #0d1526;
+  box-shadow: 0 24px 60px rgba(2, 6, 18, 0.5);
+}
+
+.hero-scene-chrome {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 6px;
+  padding: 11px 14px;
+  border-bottom: 1px solid rgba(148, 178, 232, 0.14);
+  background: #141d33;
+}
+
+.hero-scene-chrome i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: rgba(148, 178, 232, 0.32);
+}
+
+.hero-scene-flat {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  object-fit: cover;
+  object-position: left top;
+}

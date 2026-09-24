@@ -4,7 +4,14 @@ import PageHeader from "../components/PageHeader";
 import ScopeEstimator from "../components/ScopeEstimator";
 import { CONTACT, SERVICES, SOCIALS } from "../data/site";
 
-const INITIAL_FORM = { name: "", email: "", service: "", message: "" };
+const INITIAL_FORM = {
+  name: "",
+  email: "",
+  company: "",
+  service: "",
+  budget: "",
+  message: "",
+};
 const SERVICE_OPTIONS = [...SERVICES.map((s) => s.name), "Something else"];
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -308,6 +315,19 @@ export default function ContactUs() {
               <FieldError id="email-error" message={errors.email} />
             </div>
 
+            <div className="ed-field">
+              <label htmlFor="company">Company <span className="ed-optional">(optional)</span></label>
+              <input
+                id="company"
+                name="company"
+                type="text"
+                autoComplete="organization"
+                value={form.company}
+                onChange={handleChange}
+                placeholder="Acme Inc."
+              />
+            </div>
+
             <div className={`ed-field ${errors.service ? "has-error" : ""}`}>
               <span className="ed-field-label" id="service-label">
                 Service you need
@@ -321,6 +341,20 @@ export default function ContactUs() {
                 }
               />
               <FieldError id="service-error" message={errors.service} />
+            </div>
+
+            <div className="ed-field">
+              <label htmlFor="budget">
+                Budget range <span className="ed-optional">(optional)</span>
+              </label>
+              <input
+                id="budget"
+                name="budget"
+                type="text"
+                value={form.budget}
+                onChange={handleChange}
+                placeholder="Roughly what you have in mind"
+              />
             </div>
 
             <div className={`ed-field ${errors.message ? "has-error" : ""}`}>

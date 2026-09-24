@@ -1,5 +1,6 @@
 import { useEffect, useSyncExternalStore } from "react";
-import { DEFAULT_OG_IMAGE } from "../data/meta";
+import { DEFAULT_OG_IMAGE, SITE_URL } from "../data/meta";
+import { jsonLdForPath } from "../data/schema";
 import { NAV_ITEMS, SERVICES } from "../data/site";
 
 // Minimal History-API router. Every page, service section, case study and
@@ -157,9 +158,11 @@ function upsertMeta(attr, key, value) {
 
 export function useDocumentMeta({ title, description, path, image, type }) {
   useEffect(() => {
-    const origin = window.location.origin;
-    const url = `${origin}${path}`;
-    const imageUrl = new URL(image ?? DEFAULT_OG_IMAGE, origin).href;
+    // Always the production origin, never window.location.origin: otherwise
+    // opening the site on a Vercel preview URL would rewrite every canonical
+    // and og:url to that preview domain and compete with the real site.
+    const url = new URL(path, SITE_URL).href;
+    const imageUrl = new URL(image ?? DEFAULT_OG_IMAGE, SITE_URL).href;
     document.title = title;
     upsertMeta("name", "description", description);
     upsertMeta("property", "og:title", title);
@@ -177,5 +180,17 @@ export function useDocumentMeta({ title, description, path, image, type }) {
       document.head.appendChild(canonical);
     }
     canonical.setAttribute("href", url);
+
+    // Structured data for the route now showing. The prerendered HTML already
+    // carries the right block on first load; this keeps it right after a
+    // client-side navigation.
+    let schema = document.head.querySelector("script[data-schema]");
+    if (!schema) {
+      schema = document.createElement("script");
+      schema.type = "application/ld+json";
+      schema.setAttribute("data-schema", "");
+      document.head.appendChild(schema);
+    }
+    schema.textContent = jsonLdForPath(path);
   }, [title, description, path, image, type]);
 }

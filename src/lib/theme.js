@@ -8,8 +8,9 @@ const SWITCH_MS = 220;
 let switchTimer = 0;
 
 export function getInitialTheme() {
-  if (typeof document === "undefined") return "light";
-  return document.documentElement.dataset.theme === "dark" ? "dark" : "light";
+  if (typeof document === "undefined") return "dark";
+  // The inline script in index.html has already resolved this before paint.
+  return document.documentElement.dataset.theme === "light" ? "light" : "dark";
 }
 
 export function applyTheme(theme) {

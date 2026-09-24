@@ -1,11 +1,10 @@
 import Icon from "./Icon";
-import Photo from "./Photo";
-import { PHOTOS } from "../data/photos";
+import HeroScene from "./HeroScene";
 import { TEAM_SIZE_LABEL } from "../data/stats";
 
-// The hero: a dark, rounded stage with the headline on the left and one large
-// photograph on the right. Everything renders at full opacity on first paint —
-// there is no intro animation and nothing waits on a loading screen.
+// The hero: a dark, rounded stage with the headline on the left and a WebGL
+// product visual on the right. The copy is real DOM text and paints
+// immediately; the 3D scene loads afterwards and never blocks it.
 export default function Hero({ onNavigate }) {
   const goTo = (label) => (event) => {
     event.preventDefault();
@@ -52,14 +51,7 @@ export default function Hero({ onNavigate }) {
           </div>
 
           <div className="home-hero-visual">
-            <Photo
-              photo={PHOTOS.heroWork}
-              width={760}
-              ratio={4 / 3}
-              sizes="(max-width: 960px) calc(100vw - 88px), 640px"
-              priority
-              className="home-hero-photo"
-            />
+            <HeroScene />
           </div>
         </div>
       </section>

@@ -22,25 +22,44 @@ function prerenderMeta() {
       outDir = path.resolve(config.root, config.build.outDir);
     },
     async closeBundle() {
-      const metaModule = pathToFileURL(path.resolve("src/data/meta.js")).href;
       const { allRouteMeta, DEFAULT_OG_IMAGE, SITE_URL } = await import(
-        metaModule
+        pathToFileURL(path.resolve("src/data/meta.js")).href
       );
-      const template = await fs.readFile(path.join(outDir, "index.html"), "utf8");
+      const { jsonLdForPath } = await import(
+        pathToFileURL(path.resolve("src/data/schema.js")).href
+      );
+
+      const template = await fs.readFile(
+        path.join(outDir, "index.html"),
+        "utf8",
+      );
+
+      const set = (html, pattern, value) => {
+        if (!pattern.test(html)) {
+          throw new Error(`prerender-meta: ${pattern} not found in index.html`);
+        }
+        return html.replace(pattern, `$1${value}$2`);
+      };
 
       for (const meta of allRouteMeta()) {
         const url = `${SITE_URL}${meta.path === "/" ? "/" : meta.path}`;
-        const image = escapeAttr(new URL(meta.image ?? DEFAULT_OG_IMAGE, SITE_URL).href);
+        const image = escapeAttr(
+          new URL(meta.image ?? DEFAULT_OG_IMAGE, SITE_URL).href,
+        );
         const title = escapeAttr(meta.title);
         const description = escapeAttr(meta.description);
-        const set = (html, pattern, value) => {
-          if (!pattern.test(html)) throw new Error(`prerender-meta: ${pattern} not found`);
-          return html.replace(pattern, `$1${value}$2`);
-        };
+
         let html = template;
         html = set(html, /(<title>)[^<]*(<\/title>)/, title);
         html = set(html, /(<meta\s+name="description"\s+content=")[^"]*(")/, description);
         html = set(html, /(<link rel="canonical" href=")[^"]*(")/, url);
+        // JSON-LD is raw JSON inside a script tag, so it must not be
+        // attribute-escaped; only "</" needs breaking up.
+        html = set(
+          html,
+          /(<script type="application\/ld\+json" data-schema>)[\s\S]*?(<\/script>)/,
+          jsonLdForPath(meta.path).replace(/<\//g, "<\\/"),
+        );
         html = set(html, /(<meta property="og:type" content=")[^"]*(")/, meta.type ?? "website");
         html = set(html, /(<meta property="og:title" content=")[^"]*(")/, title);
         html = set(html, /(<meta\s+property="og:description"\s+content=")[^"]*(")/, description);
@@ -49,6 +68,7 @@ function prerenderMeta() {
         html = set(html, /(<meta name="twitter:title" content=")[^"]*(")/, title);
         html = set(html, /(<meta\s+name="twitter:description"\s+content=")[^"]*(")/, description);
         html = set(html, /(<meta name="twitter:image" content=")[^"]*(")/, image);
+
         const file =
           meta.path === "/"
             ? path.join(outDir, "index.html")
